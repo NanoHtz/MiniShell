@@ -1,0 +1,9 @@
+USAR VALGRIND CADA POCO
+
+NOTION
+
+Man bash tokenizacion
+    ¿Expandir o tokenizar?
+
+Numero de Builtins
+    Dividir entre 2

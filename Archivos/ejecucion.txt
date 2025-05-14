@@ -1,0 +1,15 @@
+🟩 EJECUCIÓN (acción después del parseo):
+
+-Realizar redirección de input/output/append y heredocs.
+
+-Ejecutar pipelines conectando procesos entre sí mediante pipe().
+
+-Ejecutar built-ins (echo, cd, pwd, etc.) si fueron detectados.
+
+-Ejecutar comandos externos si no son built-ins, usando fork/execve.
+
+-Expandir correctamente $? en el output al usuario tras la ejecución.
+
+-Gestionar señales como ctrl-C, ctrl-D, ctrl-\ en modo interactivo.
+
+-Terminar el shell si se recibe ctrl-D o exit.

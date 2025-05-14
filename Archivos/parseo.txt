@@ -1,0 +1,17 @@
+🟦 PARSEO (análisis del input del usuario antes de ejecutar nada):
+
+-No interpretar comillas sin cerrar o caracteres especiales no especificados.
+
+-Gestionar que ' (comilla simple) evite interpretar metacaracteres.
+
+-Gestionar que " (comilla doble) evite interpretar metacaracteres excepto $.
+
+-Implementar la lógica de detección de redirecciones: <, >, <<, >> (identificarlos correctamente en el input).
+
+-Detectar y construir correctamente la estructura de pipes (|) entre comandos.
+
+-Gestionar la expansión de variables de entorno con $VARIABLE.
+
+-Gestionar la expansión de $? al exit status del último comando ejecutado.
+
+-Detección de comandos built-ins (echo, cd, etc.) y diferenciarlos de comandos externos.
