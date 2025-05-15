@@ -13,9 +13,14 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "utils/errors.h"
-# include "libft/libft.h"
+//Básicas.
 # include <stdlib.h>
 # include <stdio.h>
+//Personales.
+# include "utils/errors.h"
+# include "libft/libft.h"
+//Edicion de linea y gestion de comandos.
+# include <readline/readline.h>
+# include <readline/history.h>
 
 #endif

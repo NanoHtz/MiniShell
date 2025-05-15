@@ -7,3 +7,5 @@ Man bash tokenizacion
 
 Numero de Builtins
     Dividir entre 2
+
+-> Bucle básico y prompt.

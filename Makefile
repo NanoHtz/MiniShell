@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/05/14 00:46:27 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/05/15 13:27:50 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,11 @@
 NAME         = minishell
 CC           = cc
 CFLAGS       = -Wall -Wextra -Werror
+
+LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
+               -L$(DIR_UTILS) -lutils \
+               -lreadline -lncurses
+
 RM           = rm -f
 NORMINETTE   = norminette
 VALGRING     = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
@@ -59,7 +64,7 @@ all: libft utils $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "\n${MAGENTA}Compilando el ejecutable $(NAME)...${RESET}\n"
-	$(CC) $(OBJS) $(CFLAGS) -L$(DIR_LIBFT) -lft -L$(DIR_UTILS) -lutils -o $(NAME)
+	$(CC) $(OBJS) $(CFLAGS) $(LIBS_FLAGS) -o $(NAME)
 	@echo "${CYAN}=================================================================================================================${RESET}"
 	@echo "${GREEN}                                       [✔] $(NAME) successfully compiled.${RESET}                               "
 	@echo "${CYAN}=================================================================================================================${RESET}"
