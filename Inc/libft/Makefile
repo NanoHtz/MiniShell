@@ -27,7 +27,12 @@ DIR_OBJ      = ./obj/
 
 HEADERS      = $(DIR_INC)/libft.h
 
-SRCS         = ft_strlen.c
+SRCS         = ft_strlen.c \
+				ft_lstadd_back.c \
+				ft_lstadd_front.c \
+				ft_lstlast.c \
+				ft_lstnew.c \
+				ft_lstsize.c
 SRCS         := $(addprefix $(DIR_SRC)/,$(SRCS))
 
 OBJS         = $(addprefix $(DIR_OBJ),$(notdir $(SRCS:.c=.o)))

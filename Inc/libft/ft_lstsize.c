@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.h                                           :+:      :+:    :+:   */
+/*   l.c                                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 11:15:22 by fgalvez-          #+#    #+#             */
-/*   Updated: 2024/12/05 14:58:44 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/05/17 11:06:20 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/05/17 11:06:20 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERRORS_H
-# define ERRORS_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <errno.h>
-# include <string.h>
+int	ft_lstsize(t_list *lst)
+{
+	int	i;
 
-# define MANY_ARGS "too many arguments"
-
-void	ft_strendl(const char *str);
-int		ft_perror(int n);
-int		ft_error_args(int n);
-
-#endif
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
+}

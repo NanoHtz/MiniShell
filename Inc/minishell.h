@@ -13,14 +13,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//Básicas.
-# include <stdlib.h>
-# include <stdio.h>
-//Personales.
-# include "utils/errors.h"
-# include "libft/libft.h"
-//Edicion de linea y gestion de comandos.
-# include <readline/readline.h>
-# include <readline/history.h>
+# include "libs.h"
+# include "structs.h"
+
+//lexer
+void	lexer(t_lexer *lexer, const char *input);
+void	init_lexer(t_lexer *lexer, const char *input);
+void	operators(const char *str);
+int		ft_escaped(const char *str, int i);
 
 #endif

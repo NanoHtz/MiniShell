@@ -19,16 +19,25 @@ void	ft_strendl(const char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		write(1, &str[i], 1);
+		write(2, &str[i], 1);
 		i++;
 	}
-	write(1, "\n", 1);
+	write(2, "\n", 1);
 }
 
-int	ft_error(const char *str)
+int	ft_perror(int n)
 {
-	write(1, "\033[31m", 5);
+	const char *str;
+
+	str = strerror(errno);
+	write(2, "Minishell: ", 11);
 	ft_strendl(str);
-	write(1, "\033[0m", 4);
-	return (-1);
+	return (n);
+}
+
+int	ft_error_args(int n)
+{
+	write(2, "Minishell: ", 11);
+	write(2, "too many arguments\n", 19);
+	return (n);
 }

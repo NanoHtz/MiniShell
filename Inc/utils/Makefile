@@ -27,7 +27,7 @@ DIR_OBJ      = ./obj/
 
 HEADERS      = $(DIR_INC)/errors.h
 
-SRCS         = ft_error.c
+SRCS         = ft_perror.c
 SRCS         := $(addprefix $(DIR_SRC)/,$(SRCS))
 
 OBJS         = $(addprefix $(DIR_OBJ),$(notdir $(SRCS:.c=.o)))

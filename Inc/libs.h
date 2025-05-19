@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.h                                           :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 11:15:22 by fgalvez-          #+#    #+#             */
-/*   Updated: 2024/12/05 14:58:44 by fgalvez-         ###   ########.fr       */
+/*   Created: 2024/12/05 21:16:53 by fgalvez-          #+#    #+#             */
+/*   Updated: 2024/12/05 15:09:58 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERRORS_H
-# define ERRORS_H
+#ifndef LIBS_H
+# define LIBS_H
 
-# include <unistd.h>
-# include <errno.h>
-# include <string.h>
-
-# define MANY_ARGS "too many arguments"
-
-void	ft_strendl(const char *str);
-int		ft_perror(int n);
-int		ft_error_args(int n);
+//Básicas.
+# include <stdlib.h>
+# include <stdio.h>
+//Personales.
+# include "utils/errors.h"
+# include "libft/libft.h"
+//Edicion de linea y gestion de comandos.
+# include <readline/readline.h>
+# include <readline/history.h>
 
 #endif

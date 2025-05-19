@@ -19,32 +19,31 @@
 //todo -> Cambios.
 //*    -> Explicaciones.
 
-
-//! Debes instalar la biblioteca readline.
-//! sudo apt update.
-//! sudo apt install libreadline-dev.
-//todo, se ha añadido al makefile, en la compilacion: -lreadline -lncurses.
-//todo, se ha elaborado el bucle principal y el prompt.
-//? Tengo dudas sobre todo lo que tiene que hacer el historial y los controles del bucle, como debe reaccionar ante cntrol + c ? etc..
-//? smo se sale del bucle con cntrol + c
-int	main(void)//? int ac, char **av, char **envp
+int	main(int	ac, char **av)//? int ac, char **av, char **envp
 {
+	t_lexer	*lxr;
 	char	*line;
-	int		len;
 
-	len = ft_strlen("Prueba de libft");
-	ft_error("Prueba de utils");
-	printf("Prueba de makefile, ft_strlen: %d\n", len);
-	//todo, cambios desde aqui.
+	(void)av;
+	if (ac != 1)
+		return (ft_error_args(127));
+	lxr = malloc(sizeof * lxr);
+	if (!lxr)
+	{
+		free(lxr);
+		return (ft_perror(1));
+	}
 	while (1)
 	{
-		line = readline("minishell$ ");//! readline utiliza malloc, siempre se hace free.
+		line = readline("minishell$ ");
 		if (line == NULL)
-			break;//* aqui no es necesario free(line), por que seria free(null)
+			break ;
 		if (*line != '\0')
-			add_history(line);//* Añade line a una estructura interna de readline, la flecha hacia arriba llama al comando anterior.
+			add_history(line);
+		lexer(lxr, line);
 		free(line);
 	}
+	rl_clear_history();
+	free(lxr);
 	return (0);
 }
-
