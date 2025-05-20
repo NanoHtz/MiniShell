@@ -15,13 +15,15 @@
 
 typedef enum e_token_type
 {
-	T_WORD,
-	T_PIPE,
-	T_REDIR_IN,
-	T_REDIR_OUT,
-	T_REDIR_APPEND,
-	T_HEREDOC,
-	T_EOF
+	T_WORD,//0
+	T_PIPE,//1 |
+	T_REDIR_IN,//2 <
+	T_REDIR_OUT,//3 >
+	T_REDIR_APPEND,//4 >>
+	T_HEREDOC,//5 <<
+	T_AND_IF,//6 &&
+	T_OR_IF,//7 ||
+	T_EOF//8 '\0'
 }	t_token_type;
 
 typedef struct s_token
@@ -32,9 +34,9 @@ typedef struct s_token
 
 typedef struct s_lexer
 {
-    const char  *input;  // la línea completa
-    size_t       pos;    // posición actual en input
-    t_list      *tokens; // lista de t_token*
-}   t_lexer;
+	const char	*input;
+	size_t		pos;
+	t_list		*tokens;
+}	t_lexer;
 
 #endif

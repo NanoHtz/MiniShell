@@ -19,7 +19,7 @@
 //todo -> Cambios.
 //*    -> Explicaciones.
 
-int	main(int	ac, char **av)//? int ac, char **av, char **envp
+int	main(int ac, char **av)
 {
 	t_lexer	*lxr;
 	char	*line;

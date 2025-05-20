@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <stddef.h>
+# include <stdio.h>
 # include <stdlib.h>
 
 typedef struct s_list
@@ -23,10 +24,12 @@ typedef struct s_list
 }	t_list;
 
 int		ft_strlen(const char *str);
-int		ft_lstsize(t_list *lst);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
+char	*ft_strdup(const char *s1);
+void	*ft_calloc(size_t count, size_t size);
+void	ft_bzero(void *s, size_t n);
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_front(t_list **lst, t_list *new);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 
 #endif

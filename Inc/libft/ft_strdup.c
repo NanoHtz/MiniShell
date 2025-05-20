@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   l.c                                                :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 11:04:24 by fgalvez-          #+#    #+#             */
-/*   Updated: 2025/05/17 11:04:24 by fgalvez-         ###   ########.fr       */
+/*   Created: 2024/03/22 18:14:16 by fgalvez-          #+#    #+#             */
+/*   Updated: 2024/03/25 18:35:37 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+char	*ft_strdup(const char *s1)
 {
-	t_list	*finish;
+	char	*dest;
+	size_t	i;
 
-	if (!lst || !new)
-		return ;
-	new->next = NULL;
-	if (!*lst)
+	dest = (char *) ft_calloc(ft_strlen(s1) + 1, sizeof(char));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (s1[i])
 	{
-		*lst = new;
-		return ;
+		dest[i] = s1[i];
+		i++;
 	}
-	finish = ft_lstlast(*lst);
-	if (!finish)
-		return ;
-	finish->next = new;
+	return (dest);
 }

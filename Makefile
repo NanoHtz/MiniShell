@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/05/19 12:04:27 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/05/20 13:23:12 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 NAME         = minishell
 CC           = cc
-CFLAGS       = -Wall -Wextra -Werror
+CFLAGS       = -Wall -Wextra -Werror -g -O0
 
 LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
                -L$(DIR_UTILS) -lutils \
@@ -40,7 +40,9 @@ DIRSOURCE   = src/
 
 SOURCES = $(DIRSOURCE)main.c \
 			$(DIRSOURCE)lexer.c \
-			$(DIRSOURCE)lexer_utils.c
+			$(DIRSOURCE)types.c \
+			$(DIRSOURCE)tokenice.c \
+			$(DIRSOURCE)quotes.c
 
 # ========================= OBJETOS =========================== #
 
@@ -135,3 +137,8 @@ err: all
 	echo "exit code: $$?"
 	@echo "\n${MAGENTA}log de errores de ./$(NAME):${RESET}\n"
 	@cat errors.log;
+
+gbd: all
+	@echo "\n${MAGENTA}Ejecutando con gbd, presiona c, luego escribe run, sal con exit + yes.${RESET}\n"
+	@echo "\n${MAGENTA}Presiona c, luego run./$(NAME)...${RESET}\n"
+	gdb --args ./$(NAME)
