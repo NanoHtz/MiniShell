@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 21:16:53 by fgalvez-          #+#    #+#             */
-/*   Updated: 2024/12/05 15:09:58 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/05/21 09:06:21 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/05/21 09:06:21 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBS_H
-# define LIBS_H
+#include "libft.h"
 
-//Personales.
-# include "utils/errors.h"
-# include "libft/libft.h"
-//Edicion de linea y gestion de comandos.
-# include <readline/readline.h>
-# include <readline/history.h>
-
-#endif
+int	ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r');
+}

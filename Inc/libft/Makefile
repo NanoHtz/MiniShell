@@ -34,7 +34,11 @@ SRCS         = ft_strlen.c \
 				ft_strdup.c \
 				ft_calloc.c \
 				ft_bzero.c \
-				ft_memcpy.c
+				ft_memcpy.c \
+				ft_strchr.c \
+				ft_isspace.c \
+				ft_strnlen.c \
+				ft_strndup.c
 SRCS         := $(addprefix $(DIR_SRC)/,$(SRCS))
 
 OBJS         = $(addprefix $(DIR_OBJ),$(notdir $(SRCS:.c=.o)))

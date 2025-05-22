@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/05/20 13:23:12 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/05/21 11:46:29 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,15 @@ HEADERS = $(DIR_UTILS)errors.h \
 			$(DIR_LIBFT)libft.h \
 
 DIRSOURCE   = src/
+DIR_LEXER   = src/lexer/
+DIR_PARSER   = src/parser/
 
 SOURCES = $(DIRSOURCE)main.c \
-			$(DIRSOURCE)lexer.c \
-			$(DIRSOURCE)types.c \
-			$(DIRSOURCE)tokenice.c \
-			$(DIRSOURCE)quotes.c
+			$(DIR_LEXER)lexer.c \
+			$(DIR_LEXER)types.c \
+			$(DIR_LEXER)tokenice.c \
+			$(DIR_LEXER)quotes.c \
+			$(DIR_PARSER)parser.c
 
 # ========================= OBJETOS =========================== #
 
@@ -82,9 +85,18 @@ $(OBJSDIR)%.o: $(DIRSOURCE)%.c
 
 $(OBJSDIR)%.o: $(DIR_MINI)/%.c
 	@mkdir -p $(dir $@)
-	@echo "${CYAN}Compilando objeto: $<${RESET}"
+	@echo "${CYAN}Compilando objetos de los includes: $<${RESET}"
 	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
 
+$(OBJSDIR)%.o: $(DIR_LEXER)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos del lexer: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_PARSER)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos del parser: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
 # ========================= LIMPIEZA DE ARCHIVOS ============================= #
 
 libft:

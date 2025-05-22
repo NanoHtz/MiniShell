@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Inc/minishell.h"
+#include "../../Inc/minishell.h"
 
 void	change_quote(t_lexer *lxr, int *sq, int *dq)
 {

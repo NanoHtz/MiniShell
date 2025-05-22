@@ -1,0 +1,13 @@
+//Better coments extension.
+//Se coloca // y justo despues ?,!,*,todo.
+//?    -> Para dudas, ?
+//!    -> Adertencias, cosas que pueden estar mal.
+//todo -> Cambios.
+//*    -> Explicaciones.
+// para mas lineas asi:
+/*
+ !
+ ?
+ todo
+ *
+*/

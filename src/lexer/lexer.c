@@ -10,8 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Inc/minishell.h"
+#include "../../Inc/minishell.h"
 
+/*
+	*Funcion de limpieza
+*/
+void	free_lexer(t_lexer *lxr)
+{
+	if (lxr->input)
+		free(lxr->input);
+	if (lxr->tokens)
+		clear_tokens(lxr->tokens);
+	lxr->tokens = NULL;
+}
+
+/*
+	*Funcion para comprobar si los tokens han sido guardados y en que orden
+*/
 void	debug_print_tokens(const t_lexer *lxr)
 {
 	t_list	*node;
@@ -33,13 +48,11 @@ void	debug_print_tokens(const t_lexer *lxr)
 	printf("[DEBUG LIST] end\n");
 }
 
-void	lexer(t_lexer *lxr, const char *input)
-{
-	init_lexer(lxr, input);
-	tokenizer(lxr);
-	debug_print_tokens(lxr);
-}
-
+/*
+	*init_lexer: inicializa la estructura lexer.
+	*Hacemos un strdup para copiad el input, y trabajar mejor con el.
+	*luego lo liberamos en free_lexer
+*/
 void	init_lexer(t_lexer *lexer, const char *input)
 {
 	if (!lexer || !input)
@@ -47,4 +60,14 @@ void	init_lexer(t_lexer *lexer, const char *input)
 	lexer->input = ft_strdup(input);
 	lexer->pos = 0;
 	lexer->tokens = NULL;
+}
+
+/*
+	*lexer: llamadas a las funciones anteriores y a la tokenizacion.
+*/
+void	lexer(t_lexer *lxr, const char *input)
+{
+	init_lexer(lxr, input);
+	tokenizer(lxr);
+	debug_print_tokens(lxr);
 }

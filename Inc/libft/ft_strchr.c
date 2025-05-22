@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 21:16:53 by fgalvez-          #+#    #+#             */
-/*   Updated: 2024/12/05 15:09:58 by fgalvez-         ###   ########.fr       */
+/*   Created: 2024/01/15 18:48:02 by fgalvez-          #+#    #+#             */
+/*   Updated: 2024/03/25 18:15:39 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBS_H
-# define LIBS_H
+#include "libft.h"
 
-//Personales.
-# include "utils/errors.h"
-# include "libft/libft.h"
-//Edicion de linea y gestion de comandos.
-# include <readline/readline.h>
-# include <readline/history.h>
+char	*ft_strchr(const char *str, int x)
+{
+	unsigned int	i;
+	char			xc;
 
-#endif
+	xc = (char) x;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == xc)
+			return ((char *) &str[i]);
+		i++;
+	}
+	if (str[i] == xc)
+		return ((char *) &str[i]);
+	return (NULL);
+}

@@ -31,5 +31,9 @@ void	ft_bzero(void *s, size_t n);
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *new);
+int		ft_isspace(char c);
+char	*ft_strchr(const char *str, int x);
+char	*ft_strndup(const char *s, size_t n);
+size_t	ft_strnlen(const char *s, size_t maxlen);
 
 #endif

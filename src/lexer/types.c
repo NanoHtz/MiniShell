@@ -10,7 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Inc/minishell.h"
+#include "../../Inc/minishell.h"
+
+static int	is_delimiter(char c)
+{
+	return (ft_isspace((unsigned char)c) || ft_strchr("<>|", c) != NULL);
+}
 
 int	take_two(const char *line, int i, const char op)
 {
@@ -74,20 +79,16 @@ int	word_token(t_lexer *lxr, int dq, int sq)
 {
 	const char	*in;
 	int			start;
+	char		*text;
 
 	in = lxr->input;
-	if (dq || sq
-		|| in[lxr->pos] == '\0'
-		|| isspace((unsigned char)in[lxr->pos])
-		|| strchr("<>|", in[lxr->pos]) != NULL)
+	if (dq || sq || in[lxr->pos] == '\0' || is_delimiter(in[lxr->pos]))
 		return (0);
 	start = lxr->pos;
-	while (in[lxr->pos]
-		&& !isspace((unsigned char)in[lxr->pos])
-		&& !strchr("<>|", in[lxr->pos]))
-	{
+	while (in[lxr->pos] && !is_delimiter(in[lxr->pos]))
 		lxr->pos++;
-	}
+	text = ft_strndup(in + start, lxr->pos - start);
 	token(lxr, T_WORD, strndup(in + start, lxr->pos - start), 0);
+	free(text);
 	return (1);
 }

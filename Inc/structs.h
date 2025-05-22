@@ -13,6 +13,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+//lexer
 typedef enum e_token_type
 {
 	T_WORD,//0
@@ -34,9 +35,30 @@ typedef struct s_token
 
 typedef struct s_lexer
 {
-	const char	*input;
+	char		*input;
 	size_t		pos;
 	t_list		*tokens;
 }	t_lexer;
+
+//parser
+typedef enum e_redir_type {
+	T_RIN,// <
+	T_ROUT,// >
+	T_RAPPEND,// >>
+	T_RHEREDOC// <<
+}	t_rtype;
+
+typedef struct s_redir {
+	t_rtype			type;
+	char			*target;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_cmd {
+	char			**av;
+	int				ac;
+	t_redir			*redirs;
+	struct s_cmd	*next;
+}	t_cmd;
 
 #endif

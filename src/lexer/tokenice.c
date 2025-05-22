@@ -10,7 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Inc/minishell.h"
+#include "../../Inc/minishell.h"
+
+void	clear_tokens(t_list *lst)
+{
+	t_list	*next;
+	t_token	*tok;
+
+	while (lst)
+	{
+		next = lst->next;
+		tok = lst->content;
+		free(tok->value);
+		free(tok);
+		free(lst);
+		lst = next;
+	}
+}
 
 t_token	*make_token(t_token_type type, const char *text)
 {

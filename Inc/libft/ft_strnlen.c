@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strnlen.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgalvez- <fgalvez-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 21:16:53 by fgalvez-          #+#    #+#             */
-/*   Updated: 2024/12/05 15:09:58 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/05/21 09:25:26 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/05/21 09:25:26 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBS_H
-# define LIBS_H
+#include "libft.h"
 
-//Personales.
-# include "utils/errors.h"
-# include "libft/libft.h"
-//Edicion de linea y gestion de comandos.
-# include <readline/readline.h>
-# include <readline/history.h>
+size_t	ft_strnlen(const char *s, size_t maxlen)
+{
+	size_t	i;
 
-#endif
+	i = 0;
+	while (i < maxlen && s[i])
+		i++;
+	return (i);
+}
