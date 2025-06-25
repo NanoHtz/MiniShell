@@ -13,6 +13,14 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+//main
+typedef struct s_mini
+{
+	char	**env;
+	char	**own_env;
+	int		last_status;
+}	t_mini;
+
 //lexer
 typedef enum e_token_type
 {
@@ -22,9 +30,8 @@ typedef enum e_token_type
 	T_REDIR_OUT,//3 >
 	T_REDIR_APPEND,//4 >>
 	T_HEREDOC,//5 <<
-	T_AND_IF,//6 &&
-	T_OR_IF,//7 ||
-	T_EOF//8 '\0'
+	T_QUOTE,//6 '\'' o ""
+	T_EOF//12 '\0'
 }	t_token_type;
 
 typedef struct s_token
@@ -45,7 +52,8 @@ typedef enum e_redir_type {
 	T_RIN,// <
 	T_ROUT,// >
 	T_RAPPEND,// >>
-	T_RHEREDOC// <<
+	T_RHEREDOC,// <<
+	T_INVALID // errores
 }	t_rtype;
 
 typedef struct s_redir {
@@ -58,6 +66,7 @@ typedef struct s_cmd {
 	char			**av;
 	int				ac;
 	t_redir			*redirs;
+	char			**cmd_env;
 	struct s_cmd	*next;
 }	t_cmd;
 

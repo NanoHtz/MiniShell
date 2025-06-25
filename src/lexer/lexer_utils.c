@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 19:05:45 by fgalvez-          #+#    #+#             */
-/*   Updated: 2025/05/09 19:05:45 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/05/28 13:38:30 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/05/28 13:38:30 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
 /*
-	*init_lexer: inicializa la estructura lexer.
-	*Hacemos un strdup para copiar el input, y trabajar mejor con el.
-	*luego lo liberamos en free_lexer
+	* is_delimiter:
+	* Comprueba si el cracter es un espacio o un caracter especial.
 */
-void	init_lexer(t_lexer *lexer, const char *input)
+int	is_delimiter(char c)
 {
-	if (!lexer || !input)
-		return ;
-	lexer->input = ft_strdup(input);
-	lexer->pos = 0;
-	lexer->tokens = NULL;
+	return (ft_isspace((unsigned char)c) || ft_strchr("<>|\"'", c) != NULL);
 }
 
 /*
-	*lexer: llamadas a las funciones anteriores y a la tokenizacion.
+	* take_two:
+	* Comprueba si el caracter actual y el siguiente son el mismo.
+	* Para casos como >>
 */
-void	lexer(t_lexer *lxr, const char *input)
+int	take_two(const char *line, int i, const char op)
 {
-	init_lexer(lxr, input);
-	tokenizer(lxr);
+	if (line[i] == op && line[i + 1] == op)
+		return (1);
+	return (0);
 }

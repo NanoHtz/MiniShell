@@ -13,6 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <unistd.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -35,5 +36,23 @@ int		ft_isspace(char c);
 char	*ft_strchr(const char *str, int x);
 char	*ft_strndup(const char *s, size_t n);
 size_t	ft_strnlen(const char *s, size_t maxlen);
-
+int		ft_isalpha(int x);
+int		ft_isalnum(int c);
+int		ft_strcspn(char *str, char c);
+char	*ft_strndup_no_nul(const char *s, size_t n);
+char	*ft_itoa(int n);
+int		ft_intlen(int n);
+char	*ft_strjoin(const char *s1, const char *s2);
+void	ft_putstr(char *str);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+void	*ft_free_split(char **s);
+void	ft_putstrendl(char *str);
+int		ft_atoi(const char *nptr);
+int		ft_isnum(const char *str);
+int		ft_isdigit(int x);
+void	ft_putendl_fd(char *str, int fd);
+void	ft_putstr_fd(char *str, int fd);
+char	*ft_substr(const char *s, unsigned int start, size_t len);
 #endif

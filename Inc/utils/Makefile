@@ -43,7 +43,7 @@ RESET        = \033[0m
 
 # ========================= REGLAS PRINCIPALES =============================== #
 
-.PHONY: all clean fclean re n
+.PHONY: all clean fclean re n nor
 
 all: $(NAME)
 
@@ -80,3 +80,6 @@ n:
 	@echo "${CYAN}=================================${RESET}"
 	-$(NORMINETTE) $(HEADERS) $(SRCS)
 	@echo "${GREEN}[✔] Norminette pasada.${RESET}\n"
+
+nor:
+	@$(NORMINETTE) $(HEADERS) $(SRCS)

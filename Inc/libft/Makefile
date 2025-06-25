@@ -38,7 +38,26 @@ SRCS         = ft_strlen.c \
 				ft_strchr.c \
 				ft_isspace.c \
 				ft_strnlen.c \
-				ft_strndup.c
+				ft_strndup.c \
+				ft_isalpha.c \
+				ft_isalnum.c \
+				ft_strcspn.c \
+				ft_itoa.c \
+				ft_intlen.c \
+				ft_strjoin.c \
+				ft_strncmp.c \
+				ft_realloc.c \
+				ft_free_split.c \
+				ft_strcmp.c \
+				ft_putstr.c \
+				ft_putstrendl.c \
+				ft_atoi.c \
+				ft_isnum.c \
+				ft_isdigit.c \
+				ft_putendl_fd.c \
+				ft_putstr_fd.c \
+				ft_substr.c
+
 SRCS         := $(addprefix $(DIR_SRC)/,$(SRCS))
 
 OBJS         = $(addprefix $(DIR_OBJ),$(notdir $(SRCS:.c=.o)))
@@ -54,7 +73,7 @@ RESET        = \033[0m
 
 # ========================= REGLAS PRINCIPALES =============================== #
 
-.PHONY: all clean fclean re norm
+.PHONY: all clean fclean re n nor
 
 all: $(NAME)
 
@@ -91,3 +110,6 @@ n:
 	@echo "${CYAN}=================================${RESET}"
 	-$(NORMINETTE) $(HEADERS) $(SRCS)
 	@echo "${GREEN}[✔] Norminette pasada.${RESET}\n"
+
+nor:
+	@$(NORMINETTE) $(HEADERS) $(SRCS)

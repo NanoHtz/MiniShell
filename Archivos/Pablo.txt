@@ -1,9 +1,0 @@
-USAR CADA POCO VALGRIND
-
-NOTION
-
-Pipex_bonus
-
-Man bash
-
-Builtins

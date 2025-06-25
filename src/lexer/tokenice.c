@@ -12,22 +12,10 @@
 
 #include "../../Inc/minishell.h"
 
-void	clear_tokens(t_list *lst)
-{
-	t_list	*next;
-	t_token	*tok;
-
-	while (lst)
-	{
-		next = lst->next;
-		tok = lst->content;
-		free(tok->value);
-		free(tok);
-		free(lst);
-		lst = next;
-	}
-}
-
+/*
+	*make_token:
+	*Asigna el tipo de token y copia el valor.
+*/
 t_token	*make_token(t_token_type type, const char *text)
 {
 	t_token	*token;
@@ -50,6 +38,12 @@ t_token	*make_token(t_token_type type, const char *text)
 	return (token);
 }
 
+/*
+	*token:
+	*Despues de hacer el token, lo añade a la lista de tipos
+	*Crea un nuevo nodo y lo añade al final de la lista
+	*ademas avanza ciertas posiciones en la cadena original.
+*/
 int	token(t_lexer *lexer, t_token_type type, const char *text, int n)
 {
 	t_token	*token;
@@ -73,22 +67,31 @@ int	token(t_lexer *lexer, t_token_type type, const char *text, int n)
 	return (0);
 }
 
+/*
+	*tokenizer: analiza caracter a caracter toda la linea.
+	*En este sentido, tenemos una jerarquia.
+	*Primero avanzamos espacios, comillas, operadores dobles, simples y palabras.
+	*Utilizamos el continue para no evaluar mas, asi seguimos la jerarquia.
+	*Una vez se evalua un caracter y es una comilla, no se evalua nada mas.
+	*Al final se añade el nulo
+	! -> PARTE CRITICA.
+*/
 void	tokenizer(t_lexer *lxr)
 {
-	int	dq;
-	int	sq;
-
-	dq = 0;
-	sq = 0;
 	while (lxr->input[lxr->pos] != '\0')
 	{
-		if (quotes(lxr, &dq, &sq))
+		if (ft_isspace(lxr->input[lxr->pos]))
+		{
+			lxr->pos++;
 			continue ;
-		if (two_ops(lxr, dq, sq))
+		}
+		if (quotes(lxr))
 			continue ;
-		if (one_ops(lxr, dq, sq))
+		if (two_ops(lxr))
 			continue ;
-		if (word_token(lxr, dq, sq))
+		if (one_ops(lxr))
+			continue ;
+		if (word_token(lxr))
 			continue ;
 		lxr->pos++;
 	}

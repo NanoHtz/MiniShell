@@ -12,14 +12,10 @@
 
 #include "../../Inc/minishell.h"
 
-void	change_quote(t_lexer *lxr, int *sq, int *dq)
-{
-	if (lxr->input[lxr->pos] == '"')
-		*dq = !*dq;
-	else if (lxr->input[lxr->pos] == '\'')
-		*sq = !*sq;
-}
-
+/*
+	*copy_value:
+	* Copia el valor de la cadena entrecomillada.
+*/
 int	copy_value(int len, int start, t_lexer *lxr)
 {
 	char	*value;
@@ -29,32 +25,36 @@ int	copy_value(int len, int start, t_lexer *lxr)
 		return (-1);
 	ft_memcpy(value, lxr->input + start, len);
 	value[len] = '\0';
-	token(lxr, T_WORD, value, 0);
+	token(lxr, T_QUOTE, value, 0);
 	free(value);
 	return (0);
 }
 
-int	quotes(t_lexer *lxr, int *dq, int *sq)
+/*
+	*quotes:
+	* Asigna a una variable si las comillas son " o '.
+	* Recorre la cadena hasta encontrar el mismo tipo de comillas.
+	* Copia desde start la longitud len.
+	* Si existe una comilla de cierre la salta.
+	! -> No tengo claro como tokenizar comillas que no tengan cierre
+	! -> Como palabra o como quote.
+*/
+int	quotes(t_lexer *lxr)
 {
-	int		len;
+	char	quote;
 	int		start;
+	int		len;
 
-	if ((lxr->input[lxr->pos] == '"' && *sq == 0)
-		|| (lxr->input[lxr->pos] == '\'' && *dq == 0))
-	{
-		change_quote(lxr, sq, dq);
+	quote = lxr->input[lxr->pos];
+	if (quote != '"' && quote != '\'')
+		return (0);
+	start = ++lxr->pos;
+	while (lxr->input[lxr->pos] != '\0' && lxr->input[lxr->pos] != quote)
 		lxr->pos++;
-		start = lxr->pos;
-		while (lxr->input[lxr->pos] != '\0'
-			&& lxr->input[lxr->pos] != '"' && lxr->input[lxr->pos] != '\'')
-			lxr->pos++;
-		len = lxr->pos - start;
-		if (copy_value(len, start, lxr) < 0)
-			return (-1);
-		if ((lxr->input[lxr->pos] == '"') || (lxr->input[lxr->pos] == '\''))
-			lxr->pos++;
-		change_quote(lxr, sq, dq);
-		return (1);
-	}
-	return (0);
+	len = lxr->pos - start;
+	if (copy_value(len, start, lxr) < 0)
+		return (-1);
+	if (lxr->input[lxr->pos] == quote)
+		lxr->pos++;
+	return (1);
 }

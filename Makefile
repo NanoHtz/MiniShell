@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/05/21 11:46:29 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/06/25 12:13:28 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,42 @@ HEADERS = $(DIR_UTILS)errors.h \
 DIRSOURCE   = src/
 DIR_LEXER   = src/lexer/
 DIR_PARSER   = src/parser/
+DIR_EXPANDS   = src/expands/
+DIR_UTILSMINI   = src/utils/
+DIR_BUILTIN     = src/builtin/
+DIR_VARS     = src/vars/
+
+IGNORED_SRC = src/debugs.c
+NORM_SRCS   = $(filter-out $(IGNORED_SRC),$(SRCS))
 
 SOURCES = $(DIRSOURCE)main.c \
+			$(DIRSOURCE)debugs.c \
 			$(DIR_LEXER)lexer.c \
 			$(DIR_LEXER)types.c \
 			$(DIR_LEXER)tokenice.c \
 			$(DIR_LEXER)quotes.c \
-			$(DIR_PARSER)parser.c
+			$(DIR_LEXER)lexer_utils.c \
+			$(DIR_LEXER)free_lexer.c \
+			$(DIR_PARSER)parser.c \
+			$(DIR_PARSER)handler.c \
+			$(DIR_PARSER)parser_utils.c \
+			$(DIR_PARSER)redir.c \
+			$(DIR_VARS)vars.c \
+			$(DIR_VARS)vars_utils1.c \
+			$(DIR_VARS)vars_utils2.c \
+			$(DIR_VARS)vars_utils3.c \
+			$(DIR_VARS)command_expands.c \
+			$(DIR_UTILSMINI)frees.c \
+			$(DIR_UTILSMINI)env.c \
+			$(DIR_BUILTIN)builtin.c \
+			$(DIR_BUILTIN)ft_echo.c \
+			$(DIR_BUILTIN)ft_pwd.c \
+			$(DIR_BUILTIN)ft_cd.c \
+			$(DIR_BUILTIN)ft_exit.c \
+			$(DIR_BUILTIN)ft_env.c \
+			$(DIR_BUILTIN)ft_unset.c \
+			$(DIR_BUILTIN)ft_export.c \
+			$(DIR_BUILTIN)ft_export_utils.c
 
 # ========================= OBJETOS =========================== #
 
@@ -64,7 +93,7 @@ RESET			= \033[0m
 RED             = \033[0;31m
 
 # ========================= REGLAS PRINCIPALES =============================== #
-.PHONY: all clean fclean re n val ex err
+.PHONY: all clean fclean re n val ex err test nor
 
 all: libft utils $(NAME)
 
@@ -97,6 +126,27 @@ $(OBJSDIR)%.o: $(DIR_PARSER)%.c
 	@mkdir -p $(dir $@)
 	@echo "${CYAN}Compilando objetos del parser: $<${RESET}"
 	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_EXPANDS)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos de las expansiones: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_UTILSMINI)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos de minishell utils: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_BUILTIN)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos de los builtins: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_VARS)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos de las variables: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
 # ========================= LIMPIEZA DE ARCHIVOS ============================= #
 
 libft:
@@ -110,6 +160,7 @@ clean:
 	$(RM) -r $(OBJSDIR)
 	@$(RM) valgrind_output
 	@$(RM) errors.log
+	@rm -rf logs
 	@$(MAKE) --no-print-directory -C $(DIR_LIBFT) clean
 	@$(MAKE) --no-print-directory -C $(DIR_UTILS) clean
 
@@ -122,14 +173,19 @@ fclean: clean
 re: fclean all
 
 # ========================= OTRAS REGLAS ===================================== #
-n:  libft utils all
+n:
 	@$(MAKE) --no-print-directory -C $(DIR_LIBFT) n
 	@$(MAKE) --no-print-directory -C $(DIR_UTILS) n
 	@echo "\n${CYAN}=================================${RESET}"
 	@echo "${GREEN}    Norminette de Minishell    ${RESET}"
 	@echo "${CYAN}=================================${RESET}"
-	-$(NORMINETTE) $(HEADERS) $(SRCS)
+	-$(NORMINETTE) $(HEADERS) $(NORM_SRCS)
 	@echo "${GREEN}[✔] Norminette completa.${RESET}\n"
+
+nor:
+	@$(MAKE) --no-print-directory -C $(DIR_LIBFT) nor
+	@$(MAKE) --no-print-directory -C $(DIR_UTILS) nor
+	@$(NORMINETTE) $(HEADERS) $(NORM_SRCS)
 
 val: all
 	@echo "\n${MAGENTA}Ejecutando Valgrind en ./$(NAME)...${RESET}\n"
@@ -141,7 +197,7 @@ valo: all
 
 ex: all
 	@echo "\n${MAGENTA}Ejecutando.../$(NAME)...${RESET}\n"
-	./$(NAME)
+	NOMBRE=FERNANDOGALVEZGORBE Edad=28 ./$(NAME)
 
 err: all
 	@echo "\n${MAGENTA}Ejecutando.../$(NAME)...${RESET}\n"
@@ -154,3 +210,16 @@ gbd: all
 	@echo "\n${MAGENTA}Ejecutando con gbd, presiona c, luego escribe run, sal con exit + yes.${RESET}\n"
 	@echo "\n${MAGENTA}Presiona c, luego run./$(NAME)...${RESET}\n"
 	gdb --args ./$(NAME)
+
+test: all
+	@mkdir -p logs
+	@echo "=== 1) Norminette ==="
+	@$(MAKE) --no-print-directory nor > logs/norminette.log 2>&1 || true
+
+	@echo "=== 2) Functional + Valgrind + GDB ==="
+	@bash tests.sh > logs/functional.log 2>&1 || true
+
+	@echo ""
+	@echo "All tests run. Revisa en logs/:"
+	@echo "  - norminette.log"
+	@echo "  - functional.log  (incluye salidas normales, valgrind y gdb por caso)"

@@ -14,12 +14,11 @@
 
 //*!	-> Aún no se han comparado los errores con los errores esperados.
 //*!	-> Readline da leaks de memoria que no es necesario corregir.
-
 /*
 	*init_mini: inicializa los campos necesarios para la mini.
 	*En el futuro podemos ir expandiendola.
 	*Se incluye por ejemplo la inicializacion del historial. Using_history es
-	*de la biblioteca ermitida de readline, inicializa la estructura de datos
+	*de la biblioteca permitida de readline, inicializa la estructura de datos
 	*necesaria para almacenar el historial.
 */
 t_lexer	*init_mini(void)
@@ -29,7 +28,7 @@ t_lexer	*init_mini(void)
 	lxr = malloc(sizeof * lxr);
 	if (!lxr)
 	{
-		ft_perror(-1);
+		ft_perror(1);
 		return (NULL);
 	}
 	using_history();
@@ -42,14 +41,18 @@ t_lexer	*init_mini(void)
 	*readline:Muestra el prompt especificado.
 	*Nos permite usar comandos basicos de historial.
 	*Por ejemplo usar el comando anterior con la flecha hacia arriba.
-	*Reserva memoria con malloc, debemos liberarla las adelante.
+	*Reserva memoria con malloc, debemos liberarla mas adelante.
 	*add_history: añade a la lista de historial la linea introducida.
-	*Se llama a lexer
-	*Se pueden llamar a mas funciones en el futuro, como parser.
+	*Se llama a lexer, expand y parser, a la creacion de variables
+	*a la expansion de comandos
+	! se debe añadir la variable $?.
+	*Se pueden llamar a mas funciones en el futuro.
+	*Se liberan algunos elementos.
 */
-void	loop(t_lexer *lxr)
+void	loop(t_lexer *lxr, t_mini *shell)
 {
 	char	*line;
+	t_cmd	*cmds;
 
 	while (1)
 	{
@@ -59,7 +62,17 @@ void	loop(t_lexer *lxr)
 		if (*line)
 			add_history(line);
 		lexer(lxr, line);
+		debug_print_tokens(lxr);
+		cmds = parser(lxr->tokens);
+		debug_print_cmds(cmds);
+		cmds = vars(cmds, shell);
+		cmds = expand_commands(cmds, shell);
+		debug_print_expanded_cmds(cmds);
+		if (!cmds)
+			continue ;
+		builtin(cmds, shell);
 		free_lexer(lxr);
+		free_cmds(cmds);
 		free(line);
 	}
 }
@@ -67,27 +80,41 @@ void	loop(t_lexer *lxr)
 /*
 	*clear_history, limpia el historial, para evitar leaks.
 	*limpieza general antes de terminar.
+	! Habrá que añadir limpiezas de own_env y comand_env
 */
-void	clear_mini(t_lexer *lxr)
+void	clear_mini(t_lexer *lxr, t_mini *shell)
 {
 	rl_clear_history();
+	ft_free_split(shell->env);
 	free(lxr);
 }
 
 /*
-	*Comprobacion de argumentos + funciones anteriores.
+	*main, cuya estructura básica sera:
+	-inicializacion
+	-mini
+	-limpieza
 */
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	t_lexer	*lxr;
+	t_mini	shell;
 
 	(void)av;
+	shell.last_status = 0;
+	shell.env = copy_env(envp);
+	shell.own_env = NULL;
+	if (!shell.env)
+	{
+		perror("minishell");
+		return (1);
+	}
 	if (ac != 1)
 		return (ft_error_args(127));
 	lxr = init_mini();
 	if (!lxr)
 		return (1);
-	loop(lxr);
-	clear_mini(lxr);
+	loop(lxr, &shell);
+	clear_mini(lxr, &shell);
 	return (0);
 }
