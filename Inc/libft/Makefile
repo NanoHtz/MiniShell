@@ -56,7 +56,9 @@ SRCS         = ft_strlen.c \
 				ft_isdigit.c \
 				ft_putendl_fd.c \
 				ft_putstr_fd.c \
-				ft_substr.c
+				ft_substr.c \
+				ft_split.c \
+				ft_putchar_fd.c
 
 SRCS         := $(addprefix $(DIR_SRC)/,$(SRCS))
 

@@ -13,39 +13,24 @@
 #include "../../Inc/minishell.h"
 
 /*
-	*Añade argumentos al comando, lo hace realojando la memoria del char*
-	* cada vez que se la llama con la nueva capacidad de memoria
-	* copia el valor del nuevo comando
-	* aumenta ac en uno
- */
-int	add_arg(t_cmd *cmd, const char *value)
-{
-	char	**new_av;
-	size_t	old_size;
-	size_t	new_size;
-
-	old_size = sizeof(char *) * (cmd->ac + 1);
-	new_size = sizeof(char *) * (cmd->ac + 2);
-	new_av = ft_realloc(cmd->av, old_size, new_size);
-	if (!new_av)
-		return (1);
-	cmd->av = new_av;
-	cmd->av[cmd->ac] = ft_strdup(value);
-	if (!cmd->av[cmd->ac])
-	{
-		ft_free_split(new_av);
-		return (1);
-	}
-	cmd->ac += 1;
-	cmd->av[cmd->ac] = NULL;
-	return (0);
-}
-
-/*
-	*Recorre la lista, comprobando cada node, y procesando el token segun sea
-	*comando, pipe o redireccion.
- */
-int	run_parse(t_list *tokens, t_cmd *head, t_token_type *last)
+	*run_parse: recorre la lista de tokens y construye/actualiza la lista de
+	*comandos del pipeline a partir de ellos.
+	*Flujo:
+	* 1) Inicializa '*last' con T_EOF y fija 'cur' (comando actual) y 'node'
+	*    (puntero al token actual).
+	* 2) Itera mientras haya tokens. Si el token no
+	*tiene 'value' (p. ej., T_EOF),
+	*    finaliza el bucle.
+	* 3) Actualiza '*last' con el tipo del token corriente y
+	* delega el manejo en
+	*    process_token(&node, &cur, shell), que puede consumir tokens y/o crear/
+	*    modificar nodos de comando.
+	* 4) Si process_token devuelve -1, libera 'head' y retorna 0 (error).
+	* 5) Si devuelve 0, el token no fue consumido por process_token, así que se
+	*    avanza manualmente a node->next. Si devuelve 1, process_token ya movió
+	*    'node' y no se toca aquí.
+*/
+int	run_parse(t_list *tokens, t_cmd *head, t_token_type *last, t_mini *shell)
 {
 	t_cmd	*cur;
 	t_list	*node;
@@ -61,7 +46,7 @@ int	run_parse(t_list *tokens, t_cmd *head, t_token_type *last)
 		if (!tok->value)
 			break ;
 		*last = tok->type;
-		ret = process_token(&node, &cur);
+		ret = process_token(&node, &cur, shell);
 		if (ret == -1)
 		{
 			free_cmds(head);
@@ -74,21 +59,33 @@ int	run_parse(t_list *tokens, t_cmd *head, t_token_type *last)
 }
 
 /*
-	*Su objetivo es estructurar las listas de tokens en comandos.
-	*Comienza verificando si la primera el primer o el ultimo
-	*caracter es una pipe -> error de sintaxis.
-	*inicializa una lista de comandos y lanza el parser
- */
-t_cmd	*parser(t_list *tokens)
+	*parser: construye la lista de comandos (pipeline) a partir de los tokens.
+	*Qué hace:
+	* 1) Ejecuta validaciones sintácticas previas sobre la lista de tokens:
+	*    operadores, redirecciones y tuberías (inicio, separación y segmentos).
+	* 2) Si alguna validación falla, retorna NULL
+	* 3) Crea el nodo cabeza con new_cmd() para acumular el primer comando.
+	* 4) Invoca run_parse() para rellenar 'head' a partir de 'tokens' y deja
+	*    en 'last' el tipo del último token significativo procesado.
+	* 5) Verifica que el pipeline no termina en tubería con check_pipe_end();
+	*    si falla, libera 'head' y retorna NULL.
+*/
+t_cmd	*parser(t_list *tokens, t_mini *shell)
 {
 	t_cmd			*head;
 	t_token_type	last;
 
-	if (!check_pipe_start(tokens))
+	if (!sintax_ops(tokens, shell))
+		return (NULL);
+	if (!sintax_redir(tokens, shell))
+		return (NULL);
+	if (!pipe_space_pipe(tokens, shell))
+		return (NULL);
+	if (!pipeline_segments(tokens, shell))
 		return (NULL);
 	head = new_cmd();
-	run_parse(tokens, head, &last);
-	if (!check_pipe_end(last))
+	run_parse(tokens, head, &last, shell);
+	if (!check_pipe_end(last, shell))
 	{
 		free_cmds(head);
 		return (NULL);

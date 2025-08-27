@@ -47,28 +47,17 @@ t_rtype	take_type(t_token_type tt)
 	return (T_INVALID);
 }
 
-/*
-	*Comprueba si existe una pipe al inicio del comenado.
- */
-int	check_pipe_start(t_list *toklist)
+int	is_redir(t_token_type t)
 {
-	if (toklist && ((t_token *)toklist->content)->type == T_PIPE)
-	{
-		fprintf(stderr, "minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	return (1);
+	if (t == T_REDIR_IN || t == T_REDIR_OUT
+		|| t == T_REDIR_APPEND || t == T_HEREDOC)
+		return (1);
+	return (0);
 }
 
-/*
-	*Comprueba si existe una pipe al final del comenado.
- */
-int	check_pipe_end(t_token_type last)
+int	is_wordish(t_token_type t)
 {
-	if (last == T_PIPE)
-	{
-		fprintf(stderr, "minishell: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	return (1);
+	if (t == T_WORD || t == T_QUOTE || t == T_SQUOTE)
+		return (1);
+	return (0);
 }

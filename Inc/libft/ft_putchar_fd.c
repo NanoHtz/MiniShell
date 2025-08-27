@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vars_utils1.c                                      :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 11:10:40 by fgalvez-          #+#    #+#             */
-/*   Updated: 2025/06/25 11:10:40 by fgalvez-         ###   ########.fr       */
+/*   Created: 2024/03/22 18:57:55 by fgalvez-          #+#    #+#             */
+/*   Updated: 2024/03/22 18:57:55 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../Inc/minishell.h"
+#include "libft.h"
 
-int	count_non_env_args(char **av)
+void	ft_putchar_fd(char c, int fd)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (av && av[i])
-	{
-		if (!ft_strchr(av[i], '=') || !is_valid(av[i]))
-			count++;
-		i++;
-	}
-	return (count);
+	write(fd, &c, 1);
 }

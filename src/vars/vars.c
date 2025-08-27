@@ -12,63 +12,29 @@
 
 #include "../../Inc/minishell.h"
 
-void	remove_vars_from_av(t_cmd *cmd)
+/*
+	*all_vars: comprueba que todos los argumentos del comando
+	* sean declaraciones validas de variables.
+*/
+int	all_vars(char **av)
 {
-	char	**new_av;
-	int		i;
-	int		j;
-	int		count;
+	int	i;
 
-	count = count_non_env_args(cmd->av);
-	new_av = malloc(sizeof(char *) * (count + 1));
-	if (!new_av)
-		return ;
 	i = 0;
-	j = 0;
-	while (cmd->av && cmd->av[i])
+	while (av && av[i])
 	{
-		if (!ft_strchr(cmd->av[i], '=') || !is_valid(cmd->av[i]))
-		{
-			new_av[j] = ft_strdup(cmd->av[i]);
-			j++;
-		}
+		if (!ft_strchr(av[i], '=') || !is_valid(av[i]))
+			return (0);
 		i++;
 	}
-	new_av[j] = NULL;
-	ft_free_split(cmd->av);
-	cmd->av = new_av;
-	cmd->ac = j;
+	return (1);
 }
 
-t_cmd	*prune_empty_cmds(t_cmd *cmds)
-{
-	t_cmd	*curr;
-	t_cmd	*prev;
-	t_cmd	*tmp;
-
-	curr = cmds;
-	prev = NULL;
-	while (curr)
-	{
-		if (curr->ac == 0 || !curr->av || !curr->av[0])
-		{
-			tmp = curr->next;
-			if (prev)
-				prev->next = tmp;
-			else
-				cmds = tmp;
-			free_cmd(curr);
-			curr = tmp;
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
-	return (cmds);
-}
-
+/*
+	*handle_all_vars: como todos los elementos son validos, actualiza la
+	* lista de variables del entorno de la minishell.
+	* despues borra el comando entero, puesto que no es ejecutable.
+*/
 void	handle_all_vars(t_cmd *cmd, t_mini *shell)
 {
 	int	i;
@@ -76,43 +42,56 @@ void	handle_all_vars(t_cmd *cmd, t_mini *shell)
 	i = 0;
 	while (cmd->av && cmd->av[i])
 	{
-		printf("Detectada asignación local: %s\n", cmd->av[i]);
 		update_env(&shell->own_env, cmd->av[i]);
-		print_own_env2(shell->own_env);
 		i++;
 	}
 	remove_command(cmd);
 }
 
+/*
+	*handle_partial_vars: repasa todos los argumentos en busca de una
+	*asignacion si la encuentra y es valida, la guarda en la
+	*lista de variables del comando, y borra el argumento del comando
+*/
 void	handle_partial_vars(t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
-	while (cmd->av && cmd->av[i])
+	while (cmd->av && cmd->av[0]
+		&& ft_strchr(cmd->av[0], '=')
+		&& is_valid(cmd->av[0]))
 	{
-		if (ft_strchr(cmd->av[i], '=') && is_valid(cmd->av[i]))
-		{
-			set_cmd_env(cmd);
-			remove_vars_from_av(cmd);
-			break ;
-		}
-		i++;
+		set_cmd_env(cmd);
+		remove_vars_from_av(cmd);
 	}
 }
 
+/*
+	*vars: recorre la lista de todos los comandos realizada por el parser
+	* se encarga de comprobar si, todo el comando son
+	* declaraciones de variables validas o si solo algun
+	* argumento de los comandos
+	* lo son, segun una cosa u otra, actua.
+*/
 t_cmd	*vars(t_cmd *cmds, t_mini *shell)
 {
 	t_cmd	*head;
+	t_cmd	*tmp;
 
 	head = cmds;
 	while (head)
 	{
+		tmp = head->next;
 		if (all_vars(head->av))
+		{
 			handle_all_vars(head, shell);
+			remove_node(&cmds, head);
+		}
 		else
-			handle_partial_vars(head);
-		head = head->next;
+		{
+			if (ft_strcmp(head->av[0], "export") != 0
+				&& ft_strcmp(head->av[0], "unset") != 0)
+				handle_partial_vars(head);
+		}
+		head = tmp;
 	}
 	return (cmds);
 }

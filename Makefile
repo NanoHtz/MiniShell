@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/06/25 12:13:28 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/08/26 18:58:55 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 NAME         = minishell
 CC           = cc
-CFLAGS       = -Wall -Wextra -Werror -g -O0
+CFLAGS       = -Wall -Wextra -Werror -g -O0 #-fsanitize=address
 
 LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
                -L$(DIR_UTILS) -lutils \
@@ -43,6 +43,9 @@ DIR_EXPANDS   = src/expands/
 DIR_UTILSMINI   = src/utils/
 DIR_BUILTIN     = src/builtin/
 DIR_VARS     = src/vars/
+DIR_EXECUTE  = src/execute/
+DIR_SIGNAL  = src/signal/
+DIR_EXPANDS  = src/expands/
 
 IGNORED_SRC = src/debugs.c
 NORM_SRCS   = $(filter-out $(IGNORED_SRC),$(SRCS))
@@ -53,28 +56,53 @@ SOURCES = $(DIRSOURCE)main.c \
 			$(DIR_LEXER)types.c \
 			$(DIR_LEXER)tokenice.c \
 			$(DIR_LEXER)quotes.c \
+			$(DIR_LEXER)one_ops.c \
 			$(DIR_LEXER)lexer_utils.c \
 			$(DIR_LEXER)free_lexer.c \
-			$(DIR_PARSER)parser.c \
-			$(DIR_PARSER)handler.c \
+			$(DIR_PARSER)checks_preparser.c \
+			$(DIR_PARSER)checks_utils.c \
+			$(DIR_PARSER)handler_redir_utils.c \
+			$(DIR_PARSER)handler_utils.c \
+			$(DIR_PARSER)handler_word_utils.c \
+			$(DIR_PARSER)more_checks_utils.c \
+			$(DIR_PARSER)more_redir_utils.c \
 			$(DIR_PARSER)parser_utils.c \
-			$(DIR_PARSER)redir.c \
+			$(DIR_PARSER)parser.c \
+			$(DIR_PARSER)process_token.c \
 			$(DIR_VARS)vars.c \
-			$(DIR_VARS)vars_utils1.c \
-			$(DIR_VARS)vars_utils2.c \
-			$(DIR_VARS)vars_utils3.c \
-			$(DIR_VARS)command_expands.c \
+			$(DIR_VARS)remove_vars.c \
+			$(DIR_VARS)update_envs.c \
+			$(DIR_VARS)key_and_entrys.c \
+			$(DIR_VARS)vars_utils.c \
+			$(DIR_VARS)last_status.c \
+			$(DIR_VARS)more_vars.c \
+			$(DIR_EXPANDS)command_expands.c \
+			$(DIR_EXPANDS)expands_utils.c \
+			$(DIR_EXPANDS)more_expands_utils.c \
+			$(DIR_EXPANDS)expands.c \
 			$(DIR_UTILSMINI)frees.c \
 			$(DIR_UTILSMINI)env.c \
+			$(DIR_UTILSMINI)status.c \
 			$(DIR_BUILTIN)builtin.c \
+			$(DIR_BUILTIN)fix_shlvl.c \
+			$(DIR_BUILTIN)utils.c \
 			$(DIR_BUILTIN)ft_echo.c \
 			$(DIR_BUILTIN)ft_pwd.c \
 			$(DIR_BUILTIN)ft_cd.c \
+			$(DIR_BUILTIN)cd_utils.c \
 			$(DIR_BUILTIN)ft_exit.c \
 			$(DIR_BUILTIN)ft_env.c \
 			$(DIR_BUILTIN)ft_unset.c \
 			$(DIR_BUILTIN)ft_export.c \
-			$(DIR_BUILTIN)ft_export_utils.c
+			$(DIR_BUILTIN)ft_export_utils.c \
+			$(DIR_BUILTIN)print_export.c \
+			$(DIR_EXECUTE)heredoc.c \
+			$(DIR_EXECUTE)heredoc_utils.c \
+			$(DIR_EXECUTE)run_cmds.c \
+			$(DIR_EXECUTE)redirections.c \
+			$(DIR_EXECUTE)execute_commands.c \
+			$(DIR_EXECUTE)path_process.c \
+			$(DIR_SIGNAL)signal.c
 
 # ========================= OBJETOS =========================== #
 
@@ -147,6 +175,16 @@ $(OBJSDIR)%.o: $(DIR_VARS)%.c
 	@echo "${CYAN}Compilando objetos de las variables: $<${RESET}"
 	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
 
+$(OBJSDIR)%.o: $(DIR_EXECUTE)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos del execute: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
+$(OBJSDIR)%.o: $(DIR_SIGNAL)%.c
+	@mkdir -p $(dir $@)
+	@echo "${CYAN}Compilando objetos del signal: $<${RESET}"
+	$(CC) $(CFLAGS) $(addprefix -I, $(DIR_HEADERS)) -c $< -o $@
+
 # ========================= LIMPIEZA DE ARCHIVOS ============================= #
 
 libft:
@@ -182,11 +220,6 @@ n:
 	-$(NORMINETTE) $(HEADERS) $(NORM_SRCS)
 	@echo "${GREEN}[✔] Norminette completa.${RESET}\n"
 
-nor:
-	@$(MAKE) --no-print-directory -C $(DIR_LIBFT) nor
-	@$(MAKE) --no-print-directory -C $(DIR_UTILS) nor
-	@$(NORMINETTE) $(HEADERS) $(NORM_SRCS)
-
 val: all
 	@echo "\n${MAGENTA}Ejecutando Valgrind en ./$(NAME)...${RESET}\n"
 	$(VALGRING) ./$(NAME)
@@ -199,27 +232,10 @@ ex: all
 	@echo "\n${MAGENTA}Ejecutando.../$(NAME)...${RESET}\n"
 	NOMBRE=FERNANDOGALVEZGORBE Edad=28 ./$(NAME)
 
-err: all
-	@echo "\n${MAGENTA}Ejecutando.../$(NAME)...${RESET}\n"
-	-./$(NAME) 2> errors.log ; \
-	echo "exit code: $$?"
-	@echo "\n${MAGENTA}log de errores de ./$(NAME):${RESET}\n"
-	@cat errors.log;
-
-gbd: all
-	@echo "\n${MAGENTA}Ejecutando con gbd, presiona c, luego escribe run, sal con exit + yes.${RESET}\n"
-	@echo "\n${MAGENTA}Presiona c, luego run./$(NAME)...${RESET}\n"
-	gdb --args ./$(NAME)
-
-test: all
-	@mkdir -p logs
-	@echo "=== 1) Norminette ==="
-	@$(MAKE) --no-print-directory nor > logs/norminette.log 2>&1 || true
-
-	@echo "=== 2) Functional + Valgrind + GDB ==="
-	@bash tests.sh > logs/functional.log 2>&1 || true
-
-	@echo ""
-	@echo "All tests run. Revisa en logs/:"
-	@echo "  - norminette.log"
-	@echo "  - functional.log  (incluye salidas normales, valgrind y gdb por caso)"
+deadcode:
+	$(MAKE) fclean
+	$(MAKE) CFLAGS+=' -O2 -ffunction-sections -fdata-sections -fno-inline' \
+	        LDFLAGS+=' -Wl,--gc-sections -Wl,--print-gc-sections -Wl,-Map=dead.map' \
+	        2>dead.link.log
+	@grep -oP "removing unused section '.text.\\K[^']+" dead.link.log | sort -u > unused_functions.txt || true
+	@echo "≫ Posibles funciones no usadas en unused_functions.txt (mapa: dead.map)"

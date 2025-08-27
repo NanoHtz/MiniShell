@@ -12,33 +12,51 @@
 
 #include "../../Inc/minishell.h"
 
+/*
+	* validate: valida los argumentos
+*/
 int	validate(char *av)
 {
 	int	i;
 
-	i = 0;
-	if (!ft_isalpha(av[i]) && av[i] != '_')
+	if (!av || !av[0])
 		return (0);
-	while (av[i] != '\0')
+	if (!ft_isalpha((unsigned char)av[0]) && av[0] != '_')
+		return (0);
+	i = 1;
+	while (av[i])
 	{
-		if (av[i] != '_' && !ft_isalnum(av[i]))
+		if (av[i] != '_' && !ft_isalnum((unsigned char)av[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	remove_var(char *av, char **env)
+/*
+	* remove_var: libera variables
+*/
+static int	env_key_match(char *entry, char *key)
+{
+	int	klen;
+
+	if (!entry || !key)
+		return (0);
+	klen = ft_strlen(key);
+	return (!ft_strncmp(entry, key, klen) && entry[klen] == '=');
+}
+
+void	remove_var(char *key, char **env)
 {
 	int	i;
 	int	j;
-	int	len;
 
+	if (!key || !env)
+		return ;
 	i = 0;
-	len = ft_strlen(av);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], av, len) == 0 && env[i][len] == '=')
+		if (env_key_match(env[i], key))
 		{
 			free(env[i]);
 			j = i;
@@ -47,28 +65,36 @@ void	remove_var(char *av, char **env)
 				env[j] = env[j + 1];
 				j++;
 			}
-			continue ;
+			break ;
 		}
 		i++;
 	}
 }
 
-void	ft_unset(t_cmd *cmd, char **env)
+/*
+	* ft_unset: comprueba si los argyumentos estan validados
+	* si lo estan, los borra
+*/
+int	ft_unset(t_cmd *cmd, char **env)
 {
 	int	i;
+	int	status;
 
 	i = 1;
+	status = 0;
 	while (i < cmd->ac)
 	{
-		if (!validate(cmd->av[i]))
+		if (!validate(cmd->av[i]) || ft_strchr(cmd->av[i], '=')
+			|| ft_strchr(cmd->av[i], ' '))
 		{
 			ft_putstr_fd("unset: `", 2);
 			ft_putstr_fd(cmd->av[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
-			i++;
-			continue ;
+			status = 1;
 		}
-		remove_var(cmd->av[i], env);
+		else
+			remove_var(cmd->av[i], env);
 		i++;
 	}
+	return (status);
 }

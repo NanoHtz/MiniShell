@@ -12,6 +12,9 @@
 
 #include "../../Inc/minishell.h"
 
+/*
+	* equal: comprueba si existe el caracter =
+*/
 int	equal(char *str, char c)
 {
 	while (*str)
@@ -23,12 +26,20 @@ int	equal(char *str, char c)
 	return (0);
 }
 
-void	ft_env(t_cmd *cmd, char **env)
+/*
+	* ft_env: comprueba el numero de argumentos
+	* imprime el entirno de las variables
+*/
+int	ft_env(t_cmd *cmd, char **env)
 {
+	int	status;
+
+	status = 0;
 	if (cmd ->ac > 1)
 	{
 		ft_putendl_fd("env: too many arguments", 2);
-		return ;
+		status = 127;
+		return (status);
 	}
 	while (*env)
 	{
@@ -36,4 +47,5 @@ void	ft_env(t_cmd *cmd, char **env)
 			ft_putstrendl(*env);
 		env++;
 	}
+	return (status);
 }

@@ -32,6 +32,7 @@ void	ft_bzero(void *s, size_t n);
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *new);
+int		ft_lstsize(t_list *lst);
 int		ft_isspace(char c);
 char	*ft_strchr(const char *str, int x);
 char	*ft_strndup(const char *s, size_t n);
@@ -53,6 +54,8 @@ int		ft_atoi(const char *nptr);
 int		ft_isnum(const char *str);
 int		ft_isdigit(int x);
 void	ft_putendl_fd(char *str, int fd);
-void	ft_putstr_fd(char *str, int fd);
+void	ft_putstr_fd(const char *str, int fd);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
+char	**ft_split(char const *s, char c);
+void	ft_putchar_fd(char c, int fd);
 #endif

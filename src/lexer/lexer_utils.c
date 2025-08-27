@@ -18,7 +18,8 @@
 */
 int	is_delimiter(char c)
 {
-	return (ft_isspace((unsigned char)c) || ft_strchr("<>|\"'", c) != NULL);
+	return (ft_isspace((unsigned char)c)
+		|| ft_strchr("<>|\"';&()`", c) != NULL);
 }
 
 /*
@@ -29,6 +30,18 @@ int	is_delimiter(char c)
 int	take_two(const char *line, int i, const char op)
 {
 	if (line[i] == op && line[i + 1] == op)
+		return (1);
+	return (0);
+}
+
+/*
+	* take_three:
+	* Comprueba si el caracter actual y los dos siguiente son el mismo.
+	* Para casos como >>>
+*/
+int	take_three(const char *line, int i, char op)
+{
+	if (line[i] == op && line[i + 1] == op && line[i + 2] == op)
 		return (1);
 	return (0);
 }

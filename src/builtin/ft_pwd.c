@@ -13,7 +13,7 @@
 #include "../../Inc/minishell.h"
 
 /*
-	*No tengo claro que debe passar si pones pwd y mas argumentos.
+	* ft_pwd: imprime la ruta actual
 */
 void	ft_pwd(void)
 {

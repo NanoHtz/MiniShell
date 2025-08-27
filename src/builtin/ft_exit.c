@@ -12,14 +12,14 @@
 
 #include "../../Inc/minishell.h"
 
-int	ft_exit(t_cmd *cmd)
+int	ft_exit(t_cmd *cmd, t_mini *shell)
 {
 	int	code;
 
 	ft_putendl_fd("exit", 1);
 	code = 0;
 	if (cmd->ac == 1)
-		exit(0);
+		exit(shell->last_status);
 	if (!ft_isnum(cmd->av[1]))
 	{
 		ft_putstr_fd("exit: ", 2);

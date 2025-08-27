@@ -13,45 +13,33 @@
 #include "../../Inc/minishell.h"
 
 /*
- * Crea un nodo de la lista de redirecciones.
- */
-t_redir	*new_redir_node(t_rtype type, const char *target)
+	*redir_syntax_err: imprime el error de sintaxis estándar para redirecciones
+	*usando el lexema del operador. Retorna 0 para encadenar retornos.
+*/
+int	redir_syntax_err(const char *op)
 {
-	t_redir	*r;
-
-	r = malloc(sizeof(*r));
-	if (!r)
-		return (NULL);
-	r->type = type;
-	r->target = strdup(target);
-	if (!r->target)
-	{
-		free(r);
-		return (NULL);
-	}
-	r->next = NULL;
-	return (r);
+	fprintf(stderr, "minishell: syntax error `%s'\n", op);
+	return (0);
 }
 
 /*
- * Añade el nodo al final de la lista de redirecciones.
- */
-void	add_redir(t_cmd *cmd, t_redir *redir)
+	*redir_expect_operand: valida que '*node' apunte a un operando válido
+	*(WORD/QUOTE/SQUOTE con value no NULL). En error informa con 'op'.
+	*Deja en '*out_tok' el token operando si es correcto.
+*/
+int	redir_expect_operand(t_list **node, const char *op, t_token **out_tok)
 {
-	t_redir	*it;
+	t_token	*tok;
 
-	if (!redir)
-		return ;
-	if (!cmd->redirs)
-		cmd->redirs = redir;
-	else
-	{
-		it = cmd->redirs;
-		while (it->next)
-			it = it->next;
-		it->next = redir;
-	}
+	if (!*node || !((t_token *)(*node)->content)->value)
+		return (redir_syntax_err(op));
+	tok = (t_token *)(*node)->content;
+	if (tok->type != T_WORD && tok->type != T_QUOTE && tok->type != T_SQUOTE)
+		return (redir_syntax_err(op));
+	*out_tok = tok;
+	return (1);
 }
+
 /*
 	*Comprueba que sea una redireccion.
 */

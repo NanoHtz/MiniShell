@@ -1,17 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vars_utils2.c                                      :+:      :+:    :+:   */
+/*   update_envs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 11:10:48 by fgalvez-          #+#    #+#             */
-/*   Updated: 2025/06/25 11:10:48 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/07/21 12:38:42 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/07/21 12:38:42 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
+/*
+	*update_env: actualiza el entorno de la minishell
+	* guarda el nombre de la asignacion y la busca, por si ya esta
+	* en caso de que este, reemplaza la entrada dentro del entorno
+	*en caso de que no, añade la entrada en el entorno.
+*/
 void	update_env(char ***own_env, const char *assign)
 {
 	char	*key;
@@ -30,58 +36,12 @@ void	update_env(char ***own_env, const char *assign)
 	free(key);
 }
 
-int	is_valid(const char *str)
-{
-	int	i;
-
-	if (!str || !str[0])
-		return (0);
-	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (0);
-	i++;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	if (str[i] != '=')
-		return (0);
-	return (1);
-}
-
-int	all_vars(char **av)
-{
-	int	i;
-
-	i = 0;
-	while (av && av[i])
-	{
-		if (!ft_strchr(av[i], '=') || !is_valid(av[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	remove_command(t_cmd *cmd)
-{
-	if (!cmd)
-		return ;
-	if (cmd->av)
-	{
-		ft_free_split(cmd->av);
-		cmd->av = NULL;
-	}
-	if (cmd->cmd_env)
-	{
-		ft_free_split(cmd->cmd_env);
-		cmd->cmd_env = NULL;
-	}
-	cmd->ac = 0;
-}
-
+/*
+	*set_cmd_env: guarda las asignaciones del entorno del comando.
+	* cuenta cuantas asignaciones debera hacer
+	* reserva memoria para las asignaciones
+	* guarda las asignaciones en un nuevo entorno del comando
+*/
 void	set_cmd_env(t_cmd *cmd)
 {
 	int	i;

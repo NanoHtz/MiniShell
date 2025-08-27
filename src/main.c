@@ -12,6 +12,8 @@
 
 #include "../Inc/minishell.h"
 
+int	g_interrupted = 0;
+
 //*!	-> Aún no se han comparado los errores con los errores esperados.
 //*!	-> Readline da leaks de memoria que no es necesario corregir.
 /*
@@ -48,6 +50,7 @@ t_lexer	*init_mini(void)
 	! se debe añadir la variable $?.
 	*Se pueden llamar a mas funciones en el futuro.
 	*Se liberan algunos elementos.
+	builtin(cmds, shell); -> poner esto si existe algun error.
 */
 void	loop(t_lexer *lxr, t_mini *shell)
 {
@@ -56,24 +59,23 @@ void	loop(t_lexer *lxr, t_mini *shell)
 
 	while (1)
 	{
+		setup_signals();
+		if (g_interrupted)
+			g_interrupted = 0;
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
-		if (*line)
-			add_history(line);
-		lexer(lxr, line);
-		debug_print_tokens(lxr);
-		cmds = parser(lxr->tokens);
-		debug_print_cmds(cmds);
-		cmds = vars(cmds, shell);
-		cmds = expand_commands(cmds, shell);
-		debug_print_expanded_cmds(cmds);
-		if (!cmds)
+		if (!*line)
+		{
+			free(line);
 			continue ;
-		builtin(cmds, shell);
-		free_lexer(lxr);
-		free_cmds(cmds);
-		free(line);
+		}
+		add_history(line);
+		lexer(lxr, line);
+		cmds = parser(lxr->tokens, shell);
+		cmds = vars(cmds, shell);
+		run_cmds(cmds, shell);
+		free_loop(lxr, cmds, line);
 	}
 }
 
@@ -103,6 +105,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	shell.last_status = 0;
 	shell.env = copy_env(envp);
+	ms_fix_shlvl(&shell.env);
 	shell.own_env = NULL;
 	if (!shell.env)
 	{

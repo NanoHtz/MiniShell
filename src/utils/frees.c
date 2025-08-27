@@ -62,3 +62,10 @@ void	free_cmds(t_cmd *cmd)
 		cmd = tmp;
 	}
 }
+
+void	free_loop(t_lexer *lxr, t_cmd	*cmds, char *line)
+{
+	free_lexer(lxr);
+	free_cmds(cmds);
+	free(line);
+}
