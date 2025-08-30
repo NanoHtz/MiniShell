@@ -1,6 +1,6 @@
-<!-- assets/banner.svg | minishell -->
+<!-- assets/banner.svg | minishell (ajustado) -->
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="t d">
-  <title id="t">minishell — Lexer/Parser · Pipes · Redirections · Signals</title>
+  <title id="t">Minishell — Lexer/Parser · Pipes · Redirections · Signals</title>
   <desc id="d">Banner oscuro con una ventana de terminal minimalista y un pipeline.</desc>
 
   <defs>
@@ -15,8 +15,10 @@
   </defs>
 
   <rect width="1280" height="360" fill="url(#bg)"/>
+
+  <!-- texto -->
   <g transform="translate(64,112)">
-    <text class="title">minishell</text>
+    <text class="title">Minishell</text>
     <text class="tag" y="48">Lexer/Parser · Pipes · Redirections · Signals</text>
     <text class="tag" y="78">C · Unix internals</text>
   </g>
@@ -24,13 +26,18 @@
   <!-- terminal -->
   <g transform="translate(760,70)">
     <rect x="0" y="0" width="480" height="220" rx="12" fill="#0b1020" stroke="#70a5fd" stroke-opacity=".5"/>
+    <!-- semáforos -->
     <g transform="translate(16,14)">
       <circle cx="0" cy="0" r="4" fill="#f7768e"/><circle cx="12" cy="0" r="4" fill="#bb9af7"/><circle cx="24" cy="0" r="4" fill="#7aa2f7"/>
     </g>
+    <!-- contenido (envuelto en varias líneas para no desbordar) -->
     <g transform="translate(16,42)">
-      <text class="mono">nano@42:~$ ./minishell</text>
-      <text class="mono" y="28">minishell$ cat file.txt | grep foo | wc -l &gt; count.txt</text>
-      <text class="mono" y="56">minishell$ echo $USER</text>
+      <text class="mono">
+        <tspan x="0" dy="0">nano@42:~$ ./minishell</tspan>
+        <tspan x="0" dy="22">minishell$ cat file.txt |</tspan>
+        <tspan x="0" dy="22">grep foo | wc -l &gt; count.txt</tspan>
+        <tspan x="0" dy="22">minishell$ echo $USER</tspan>
+      </text>
     </g>
   </g>
 </svg>
