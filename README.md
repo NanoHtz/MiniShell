@@ -3,85 +3,127 @@
   <img src="assets/banner.svg" alt="Banner de TODO_TITULO" width="100%" />
 </p>
 
-<!-- ===================== BADGES (ajusta/borra los que no apliquen) ===================== -->
-<p align="center">
-  <img src="https://img.shields.io/github/stars/NanoHtz/TODO_REPO?style=social" alt="Stars">
-  <img src="https://img.shields.io/github/last-commit/NanoHtz/TODO_REPO?label=last%20commit&color=7aa2f7&labelColor=1a1b27" alt="Last commit">
-  <img src="https://img.shields.io/github/languages/top/NanoHtz/TODO_REPO?color=70a5fd&label=language&labelColor=1a1b27" alt="Top language">
-  <!-- CI opcional (si tienes workflow .github/workflows/build.yml):
-  <img src="https://img.shields.io/github/actions/workflow/status/NanoHtz/TODO_REPO/build.yml?label=CI&logo=githubactions&logoColor=white&labelColor=1a1b27">
-  -->
-  <img src="https://img.shields.io/github/license/NanoHtz/TODO_REPO?color=bb9af7&labelColor=1a1b27" alt="License">
-  <!-- PRs welcome:
-  <img src="https://img.shields.io/badge/PRs-welcome-70a5fd?labelColor=1a1b27">
-  -->
-</p>
-
-<h1 align="center">TODO_TITULO</h1>
-<p align="center"><i>TODO_TAGLINE — una línea que diga qué hace el proyecto y por qué importa.</i></p>
+<p align="center"><i>🧠 Philosophers (42 Cursus) — Solución al clásico "Dining Philosophers Problem" con threads y mutexes, evitando deadlocks race conditions y starvation.</i></p>
 
 ---
 
 ## Índice
 - [Resumen](#resumen)
-- [Capturas / Demo](#capturas--demo)
-- [Stack / Dependencias](#stack--dependencias)
-- [Estructura](#estructura)
-- [Instalación y uso](#instalación-y-uso)
-- [Tests](#tests)
-- [Rendimiento / Complejidad](#rendimiento--complejidad)
-- [Roadmap](#roadmap)
-- [Problemas conocidos](#problemas-conocidos)
-- [Contribuir](#contribuir)
-- [Licencia](#licencia)
-- [Autor](#autor)
+- [¿Para qué?](#para-que)
+- [Explicación](#explicacion)
+- [Compilación](#compilacion)
+- [Uso](#uso)
+- [Salida esperada y pruebas](#salida)
+
+---
+<a id="resumen"></a>
+## ✅ Resumen del proyecto<br>
+
+Philosophers simula a N filósofos sentados alrededor de una mesa. Cada filósofo alterna entre pensar, comer y dormir. Para comer, necesita dos tenedores (izquierdo y derecho). Los tenedores son recursos compartidos, modelados con mutexes. El objetivo es que la simulación no entre en deadlock (todos esperando indefinidamente), evite starvation (nadie se queda sin comer indefinidamente), y mantenga la precisión de tiempos dada por los parámetros.
+
+<a id="para-que"></a>
+## 🧩 ¿Para qué?
+
+**¿Qué se aprende?**
+- Concurrencia en C con `pthreads`: creación/joineo de hilos, diseño de rutinas.
+- **Sincronización** con `mutex`: proteger estados.
+- **Prevención de deadlocks** y **starvation**.
+- **Temporización en ms**: `gettimeofday` + sleep activo a intervalos cortos.
+---
+
+<a id="explicacion"></a>
+<details>
+  <summary><h3>📝 Explicación</h3></summary>
+
+  <!-- Pon aquí tu explicación técnica: 
+       - Modelo de hilos: un hilo por filósofo + 1 monitor (si usas monitor).
+       - Política de tomar tenedores (izq/dcha) y cómo evitas deadlock.
+       - Estructuras: estado compartido, mutex por tenedor, mutex de impresión, etc.
+       - Temporización: cómo mides ms y cómo haces sleeps cortos activos.
+       - Criterios de fin: muerte, must_eat, orden de salida.
+  -->
+
+</details>
 
 ---
 
-## Resumen
-- **Qué**: TODO_descripción_corta (1–2 frases).
-- **Para qué**: valor que aporta (p. ej., “aprendizaje de X”, “utilidad Y”).
-- **Estado**: `alpha` / `estable` / `en progreso`.
-- **Highlights**: 3 bullets de funciones o decisiones técnicas clave.
+<a id="compilacion"></a>
+## 🛠️ Compilación
+⬇️ Descarga
 
----
+```bash
+git clone https://github.com/NanoHtz/philosofers.git
+cd philosofers
+```
 
-## Capturas / Demo
-<!-- Deja una o varias imágenes / GIFs; guarda en assets/ -->
-<p align="center">
-  <!-- <img src="assets/demo_1.png" width="85%" alt="Demo"> -->
-  <!-- <img src="assets/demo.gif" width="85%" alt="Animación"> -->
-  <i>Incluye aquí una imagen o GIF corto si aporta valor.</i>
-</p>
+🏗️ Compilar con Makefile
 
----
+```bash
+make # compila el ejecutable philo
+make re # limpia y recompila desde cero
+make clean # borra objetos
+make fclean # borra objetos y el binario
+```
+<a id="uso"></a>
+## ▶️ Uso
 
-## Stack / Dependencias
-<!-- Elige la variante que aplique y elimina la otra -->
+```bash
+./philo number_of_philosophers(>=1) time_to_die(ms) time_to_eat(ms) time_to_sleep(ms) [must_eat]
+```
+Donde:<br>
+- number_of_philosophers: número de filósofos que participaran(≥1)<br>
+- time_to_die: tiempo máximo desde la última comida hasta morir(ms).<br>
+- time_to_eat: tiempo que tardan en comer (con 2 tenedores)(ms).<br>
+- time_to_sleep: tiempo que duermen tras comer(ms).<br>
+- must_eat (opcional): si se da, la simulación termina cuando cada filósofo ha comido al menos ese número de veces.<br>
 
-<!-- ===== Variante C / 42 ===== -->
-- **Lenguaje**: C (C99/gnu11)
-- **Build**: Makefile (`cc -Wall -Wextra -Werror`)
-- **POSIX**: `unistd.h`, `fcntl.h`, `signal.h`, etc.
-- **Opcional**: MiniLibX / pthreads / readline
+<a id="salida"></a>
+## 🖨️ Salida esperada y pruebas
 
-<!-- ===== Variante Python / Datos ===== -->
-<!--
-- **Lenguaje**: Python 3.10+
-- **Entorno**: venv / conda
-- **Paquetes**: numpy, pandas, matplotlib, scipy, scikit-learn, jupyter
--->
+Sale en este formato:
 
----
+```bash
+<timestamp_ms> <id_filo> <acción>
+```
+Ejemplo:
+```bash
+0 1 is thinking
+1 2 is thinking
+2 1 has taken a fork
+3 1 has taken a fork
+3 1 is eating
+...
+803 4 died
+```
+Pruebas:
+Te dejo algunos test básicos para que puedas probar:
+```bash
+./philo									-> Faltan argumentos; debe imprimir error por stderr
+./philo 1 2 3							-> Faltan argumentos; debe imprimir error por stderr
+./philo foo 800 200 200					-> Entrada no numérica; debe rechazar con “Only digits” por stderr
+./philo -5 800 200 200					-> Signo no permitido si exiges “solo dígitos”; debe rechazar por stderr
+./philo 0 800 200 200					-> Valor fuera de rango (número de filósofos debe ser ≥ 1); error por stderr
+./philo 5 800 200 200 300 400			-> Demasiados argumentos; error por stderr
+./philo 5 0 200 200						-> time_to_die debe ser > 0; error de rango por stderr
+./philo 5 2147483647 200 200			-> Límite superior válido; la simulación arranca correctamente
+./philo 5 2147483648 200 200			-> Overflow / fuera de rango; error por stderr y exit code ≠ 0
+./philo " 5" 800 200 200				-> Entrada con espacio; según tu política, normalmente error “Only digits”
+./philo 2 800 200 200					-> Sin must_eat; nadie muere y la simulación no termina sola
+./philo 1 300 100 100					-> Caso 1 filósofo; puede “has taken a fork” y luego un único “died” (~300 ms);
+./philo 5 10 100 100					-> time_to_die muy bajo; debe aparecer un único “died” y ser la última línea
+./philo 50 1000 100 100					-> Escalabilidad; muchos hilos, sin muertes y sin terminar solo
+./philo 50 1000 100 100 1				-> must_eat=1; termina cuando todos comen una vez; cero “died”
+./philo 5 800 200 200 3					-> Debe finalizar cuando todos coman 3 veces; cero “died”;
+./philo 5 310 200 200					-> Debe morir uno alrededor de 310 ms (± margen);
+./philo 5 200 300 100					-> Caso límite (eat > die); debe morir alguien (un único “died”)
+./philo 5 10 100 100					-> Muerte muy rápida; un “died” y es la última línea
+```
+Si pasas estas pruebas satisfactoriamente te animo a utilizar el tester, realiza pruebas de deadlock, starvation y demas:
+- https://github.com/dantonik/42-philosophers-tester
 
-## Estructura
-```text
-TODO_REPO/
-├─ src/              # código fuente
-├─ include/          # headers (si C)
-├─ notebooks/        # *.ipynb (si Python)
-├─ tests/            # mains de prueba o pytest
-├─ assets/           # banner.svg, capturas
-├─ Makefile          # si C/42
-├─ requirements.txt  # si Python
-└─ README.md
+Valgrind:
+```bahs
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo 5 800 200 200 3
+valgrind --tool=helgrind ./philo 5 800 200 200 3
+valgrind --tool=drd ./philo 5 800 200 200 3
+```
