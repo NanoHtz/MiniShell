@@ -1,6 +1,6 @@
 <!-- ===================== BANNER ===================== -->
 <p align="center">
-  <img src="assets/banner.svg" alt="Banner de TODO_TITULO" width="100%" />
+  <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/minishell/banner.svg" alt="Philosophers banner">
 </p>
 
 <p align="center"><i>🧠 Philosophers (42 Cursus) — Solución al clásico "Dining Philosophers Problem" con threads y mutexes, evitando deadlocks race conditions y starvation.</i></p>
@@ -35,13 +35,64 @@ Philosophers simula a N filósofos sentados alrededor de una mesa. Cada filósof
 <details>
   <summary><h3>📝 Explicación</h3></summary>
 
-  <!-- Pon aquí tu explicación técnica: 
-       - Modelo de hilos: un hilo por filósofo + 1 monitor (si usas monitor).
-       - Política de tomar tenedores (izq/dcha) y cómo evitas deadlock.
-       - Estructuras: estado compartido, mutex por tenedor, mutex de impresión, etc.
-       - Temporización: cómo mides ms y cómo haces sleeps cortos activos.
-       - Criterios de fin: muerte, must_eat, orden de salida.
-  -->
+<b>🧵 Hilos</b><br>
+• Un hilo es la ejecución mínima dentro de un proceso.<br>
+• Comparte con otros hilos del mismo proceso: memoria, descriptores de archivo y recursos comunes.<br>
+• Permite hacer varias cosas a la vez (concurrencia y posible paralelismo); si un hilo se bloquea, los demás pueden seguir.<br><br>
+
+<b>⚠️ Race conditions</b><br>
+• Ocurren cuando varios hilos acceden/modifican el mismo dato sin coordinación.<br>
+• Ejemplo: dos hilos imprimiendo o escribiendo a la vez en el mismo buffer/archivo.<br>
+• Efecto: resultados impredecibles (salida mezclada, datos corruptos).<br><br>
+
+🔒 Un mutex (mutual exclusion) es un cerrojo que garantiza que solo un hilo a la vez entra en una “sección crítica”
+Sin mutexes, dos hilos podrían modificar/imprimir/leer el mismo recurso a la vez → race conditions.
+<br>
+Los usamos para:
+<br>
+• <b>Tenedores</b> (uno por sitio): comer implica bloquear 2 forks.<br>
+• <b>Impresión</b>: un print_mutex evita mezclar líneas en la salida.<br>
+• <b>Conrol</b>: desde el control observamos los valores en cada momento, tambien se ha de mutear sin se quiere "solo" observar, puesto que en ese mismo momento su valor puede estar cambiando por otro hilo.
+<br><br>
+
+<b>🍴 Mapeo del problema</b><br>
+• <b>Filósofo</b> → cada filosofo es un hilo con el ciclo: pensar → tomar tenedores → comer → soltar → dormir.<br>
+• <b>Tenedor</b> → un mutex.<br>
+• <b>Mesa</b> → estructura compartida con forks, tiempos, start_time y mutexes.
+<br><br>
+
+<b>🛑 Deadlock (interbloqueo) y cómo evitarlo</b><br>
+Si todos cogen el mismo lado primero, pueden quedarse todos esperando el segundo tenedor.<br>
+Solución simple: <b>orden par/impar</b> (rompe el ciclo de espera).<br>
+• Filósofos pares: primero derecho, luego izquierdo.<br>
+• Filósofos impares: primero izquierdo, luego derecho.
+<br><br>
+
+<b>🥣 Starvation (inanición)</b><br>
+Intentamos que nadie se quede sin comer indefinidamente. Con el orden par/impar y tiempos razonables, no debería ocurrir en el <i>mandatory</i>.<br>
+Usamos un pequeño tiempo de arranque, para que todos empiecen en el mismo momento y sincronizarlos.
+<br><br>
+Para dormir con precisión, se usa un <i>sleep</i> en bucle con pausas cortas (p. ej. usleep en pasos pequeños).
+<br><br>
+
+<b>🩺 Monitor</b><br>
+Un hilo de control vigila periódicamente a todos:<br>
+• Si <code>ahora - last_meal > time_to_die</code> → activa <code>stop</code> e imprime una única línea "<b>died</b>".<br>
+• Si existe <code>must_eat</code> y todos llegaron a su cuota → <code>stop</code> sin muertes.
+<br><br>
+
+<b>🧊 Casos borde</b><br>
+• <b>N = 1</b>: solo puede coger un tenedor → nunca come → muere tras <code>time_to_die</code>.<br>
+• La línea "<b>died</b>" debe ser la <b>última</b> de la salida y aparecer una sola vez.
+<br><br>
+
+<b>🧭 Flujo general</b><br>
+1) Validar argumentos.<br>
+2) Inicializar mesa (forks, mutexes, tiempos).<br>
+3) Crear filósofos (hilos) y esperar al <code>start_time</code>.<br>
+4) Cada hilo ejecuta su ciclo; el monitor vigila.<br>
+5) Al terminar: <i>join</i> de hilos, <i>destroy</i> de mutexes y <i>free</i> de memoria.
+<br><br>
 
 </details>
 
@@ -120,6 +171,13 @@ Te dejo algunos test básicos para que puedas probar:
 ```
 Si pasas estas pruebas satisfactoriamente te animo a utilizar el tester, realiza pruebas de deadlock, starvation y demas:
 - https://github.com/dantonik/42-philosophers-tester
+
+Valgrind:
+```bahs
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./philo 5 800 200 200 3
+valgrind --tool=helgrind ./philo 5 800 200 200 3
+valgrind --tool=drd ./philo 5 800 200 200 3
+```
 
 Valgrind:
 ```bahs
