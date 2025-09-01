@@ -3,7 +3,7 @@
   <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/minishell/banner.svg" alt="Philosophers banner">
 </p>
 
-<p align="center"><i>🖥️ Minishell (42 Cursus) — Mini intérprete POSIX en C con lexer/parser, pipes, redirecciones, expansión de variables, heredoc, señales y built-ins (comportamiento tipo bash).</i></p>
+<p align="center"><i>🖥️ Minishell (42 Cursus) — Intérprete de shell en C con lexer/parser, pipes, redirecciones, expansión de variables, heredoc, señales y built-ins (comportamiento tipo bash).</i></p>
 
 ---
 
@@ -20,7 +20,7 @@
 <a id="resumen"></a>
 ## ✅ Resumen del proyecto
 
-**Minishell** es un shell interactivo mínimo escrito en C. Implementa **tokenización y parseo**, **pipes y redirecciones** (`|`, `>`, `>>`, `<`, `<<`), **expansión de variables** (incl. `$?`), **comillas simples/dobles**, **heredoc** y **built-ins** (`cd`, `echo`, `pwd`, `env`, `export`, `unset`, `exit`). Maneja **señales** como `Ctrl+C` y reproduce el comportamiento esencial de **bash** (códigos de salida y mensajes de error incluidos).
+**Minishell** es un shell interactivo escrito en C. Implementa **tokenización y parseo**, **pipes y redirecciones** (`|`, `>`, `>>`, `<`, `<<`), **expansión de variables** (incl. `$?`), **comillas simples/dobles**, **heredoc** y **built-ins** (`cd`, `echo`, `pwd`, `env`, `export`, `unset`, `exit`). Maneja **señales** como `Ctrl+C` y reproduce el comportamiento esencial de **bash** (códigos de salida y mensajes de error incluidos).
 
 ---
 
@@ -104,5 +104,5 @@
 
 ⬇️ Descarga
 ```bash
-git clone <URL-de-tu-repo-minishell>.git
-cd minishell
+git clone <https://github.com/NanoHtz/MiniShell>.git
+```
