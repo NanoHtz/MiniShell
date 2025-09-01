@@ -104,5 +104,5 @@
 
 ⬇️ Descarga
 ```bash
-git clone <https://github.com/NanoHtz/MiniShell>.git
+git clone git@github.com:NanoHtz/MiniShell.git
 ```
