@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   process_token_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 13:56:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/01 11:16:35 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/09/01 10:19:59 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/09/01 10:19:59 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-void	sigint_prompt_handler(int sig)
+t_redir	*last_redir_node(t_redir *lst)
 {
-	(void)sig;
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_redisplay();
-	g_interrupted = 1;
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }
 
-void	setup_signals(void)
+t_list	*last_or_self(t_list *candidate, t_list *self)
 {
-	signal(SIGINT, sigint_prompt_handler);
-	signal(SIGQUIT, SIG_IGN);
+	if (candidate)
+		return (candidate);
+	return (self);
 }

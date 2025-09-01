@@ -1,0 +1,97 @@
+COMANDO INTRODUCIDO                                                      MENSAJE DE ERROR ESPERADO
+----------------------------------------------------------------------------------------------------
+| ls                                                      minishell: syntax error near unexpected token `|'
+& ls                                                      minishell: syntax error near unexpected token `&'
+ls |                                                      minishell: syntax error near unexpected token `|'
+ls || wc                                                  minishell: syntax error near unexpected token `||'
+ls && wc                                                  minishell: syntax error near unexpected token `&&'
+ls | | wc                                                  minishell: syntax error near unexpected token `|'
+ls & & wc                                                  minishell: syntax error near unexpected token `&'
+;                                                    minishell: syntax error near unexpected token `;'
+hola;                                                  minishell: syntax error near unexpected token `;'
+ls &                                                      minishell: syntax error near unexpected token `&'
+& ls                                                      minishell: syntax error near unexpected token `&'
+ls & & wc                                                      minishell: syntax error near unexpected token `&'
+echo >                                                      minishell: syntax error near unexpected token `newline'
+cat <                                                      minishell: syntax error near unexpected token `newline'
+cmd >>                                                      minishell: syntax error near unexpected token `newline'
+cmd <<                                                      minishell: syntax error near unexpected token `newline'
+echo > |                                                      minishell: syntax error near unexpected token `|'
+echo > > a                                                    minishell: syntax error near unexpected token `>'
+( ls )                                                     minishell: syntax error near unexpected token `('
+echo )                                                      minishell: syntax error near unexpected token `)'
+$(ls)                                                      minishell: syntax error near unexpected token `$('
+echo `date`                           `                           minishell: syntax error near unexpected token ``'
+$ ( ls )                                                      minishell: syntax error near unexpected token `('
+foo(bar                                                      minishell: syntax error near unexpected token `('
+cat < | wc                                                  error: minishell: syntax error near unexpected token \|'`
+cmd >> |                                                   minishell: syntax error near unexpected token \|'`
+cmd << |                                                  minishell: syntax error near unexpected token \|'`
+echo > "out.txt"                                           sin error de sintaxis.
+cat < "in.txt"                                             sin error de sintaxis.
+echo > "("                                               sin error (va entre comillas, es literal).
+<<<                                                       minishell: syntax error near unexpected token '<<<'.
+cmd >>> f                                                 minishell: syntax error near unexpected token '>>>'.
+echo "hola                                               minishell: syntax error near unexpected token 'newline'
+echo 'hola                                                  minishell: syntax error near unexpected token 'newline'
+echo > "file                                                minishell: syntax error near unexpected token 'newline'
+echo "a | b"                                               sin error (el | va dentro de comillas)
+echo '$(ls)'                                               sin error (literal)
+echo "&&"                                                  sin error (literal)
+ls | > out                                               minishell: syntax error near unexpected token '>'
+ls | < in                                               minishell: syntax error near unexpected token '<'
+> out | wc                                             minishell: syntax error near unexpected token '|'
+| > out                                                      minishell: syntax error near unexpected token |'
+echo > ""                                                  sin error de sintaxis (luego fallará al abrir "", pero eso ya es de ejecución).
+echo "" > ""                                             sin error de sintaxis.
+cat << "EOF" | wc                                      sin error de sintaxis.
+cat << EOF                                        sin error de sintaxis en el parseo; la lectura del heredoc vendrá después (en ejecución).
+echo (línea vacía)                                        sin error, no hace nada.
+cmd >>| wc →                                            minishell: syntax error near unexpected token '|' (porque tras >> hay un operador, no un operando).
+echo >out.txt                                        sin error de sintaxis (acepto out.txt como operando).
+cat <in.txt                                            sin error de sintaxis.
+cmd >>out                                              sin error de sintaxis.
+cat <<EOF                                             sin error de sintaxis (el heredoc se gestionará luego en ejecución).
+echo >                                                  minishell: syntax error near unexpected token 'newline'
+echo > a >                                          minishell: syntax error near unexpected token 'newline'
+echo > a > b                                        sin error de sintaxis (válido)
+cat < > a → >'                                         minishell: syntax error near unexpected token '>'
+cat > < a → <'                                           minishell: syntax error near unexpected token '<'
+cmd | << EOF → <<'                                        minishell: syntax error near unexpected token '<<'
+ls | > out wc                                           sin error (redir prefijo + comando wc).
+ls | < in wc                                              sin error.
+ls | > out                                               minishell: syntax error near unexpected token 'newline'
+ls | < in | wc                                            minishell: syntax error near unexpected token '|' (no hubo comando antes del siguiente pipe).
+> out                                                 sin error (crear/abrir out).
+< in                                                    sin error (si no existe, el fallo es de ejecución, no de sintaxis).
+>> out                                                     sin error.
+<< EOF                                                  sin error (después entra la lectura del heredoc).
+> "" y < ""                                             sin error (luego la ejecución puede fallar).
+echo hola|wc -c (sin espacios)                                   sin error; debe comportarse igual que echo hola | wc -c
+{ ls; }                                                         minishell: syntax error near unexpected token '{'
+echo }                                                             minishell: syntax error near unexpected token '}'
+{                                                                    minishell: syntax error near unexpected token '{'
+}                                                                      minishell: syntax error near unexpected token '}'
+echo "{"                                                                 sin error
+echo "}"                                                                sin error
+ls | << EOF wc                                                     válido (redir prefijo + comando wc; entrará en lectura del heredoc hasta que escribas EOF).
+ls | << EOF                                                  minishell: syntax error near unexpected token 'newline'
+ls | << EOF | wc                                            minishell: syntax error near unexpected token '|' (aparece otro pipe sin haberse visto comando real entre medias).
+
+cmd|||wc                                              minishell: syntax error near unexpected token '||'
+cmd &&& wc                                         minishell: syntax error near unexpected token '&&'
+>>>> a                                              minishell: syntax error near unexpected token '>>>'
+<<<< a                                              minishell: syntax error near unexpected token '>>>'
+;& ls                                              minishell: syntax error near unexpected token ';'
+>& ls                                                      minishell: syntax error near unexpected token '&'
+|&| ls                                                         minishell: syntax error near unexpected token '|&'
+< in | wc                                                           minishell: syntax error near unexpected token '|'
+< in cmd | wc                                                     sin error.
+ls | "wc" -c                                                sin error (las comillas hacen el comando literal wc).
+"echo" hola                                                 sin error.
+> "" | wc                                                     minishell: syntax error near unexpected token '|'
+ls | > "" wc                                                  sin error.
+
+\t → sin error muestra carpetas y archivos
+echo "hola													debe mostrar dos mensajes de error
+echo 'hola													debe mostrar dos mensajes de error

@@ -1,0 +1,2 @@
+echo ok < .
+el valor de pwd, oldpwd y demas valores dependientes del entorno en export.

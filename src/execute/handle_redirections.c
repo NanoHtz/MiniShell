@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 13:56:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/01 11:16:35 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/09/01 10:30:11 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/09/01 10:30:11 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-void	sigint_prompt_handler(int sig)
+int	handle_redirections(t_cmd *cmd)
 {
-	(void)sig;
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_redisplay();
-	g_interrupted = 1;
-}
+	t_redir		*r;
+	int			ret;
 
-void	setup_signals(void)
-{
-	signal(SIGINT, sigint_prompt_handler);
-	signal(SIGQUIT, SIG_IGN);
+	if (!cmd)
+		return (0);
+	r = cmd->redirs;
+	while (r)
+	{
+		if (r->type == T_RIN)
+			ret = redir_read(r);
+		else if (r->type == T_ROUT)
+			ret = redir_write(r);
+		else if (r->type == T_RAPPEND)
+			ret = redir_append(r);
+		else if (r->type == T_RHEREDOC)
+			ret = handle_heredoc_redir(r);
+		else
+			ret = 0;
+		if (ret < 0)
+			return (-1);
+		r = r->next;
+	}
+	return (0);
 }

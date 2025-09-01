@@ -44,3 +44,35 @@ int	syntax_error_unclosed_quote(t_mini *sh, char quote)
 	sh->last_status = 2;
 	return (-1);
 }
+
+void	handle_command_not_found(t_cmd *cmd, char **exec_env)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->av[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free_charpp(exec_env);
+	_exit(127);
+}
+
+void	handle_directory_error(t_cmd *cmd, char **exec_env)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->av[0], 2);
+	ft_putendl_fd(": Is a directory", 2);
+	free_charpp(exec_env);
+	_exit(126);
+}
+
+void	handle_execve_error(char *cmd_name, char **exec_env)
+{
+	int	err;
+
+	err = errno;
+	perror(cmd_name);
+	free_charpp(exec_env);
+	if (err == EACCES || err == EPERM)
+		_exit(126);
+	if (err == ENOENT)
+		_exit(127);
+	_exit(127);
+}

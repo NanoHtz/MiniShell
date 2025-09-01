@@ -13,21 +13,6 @@
 #include "../../Inc/minishell.h"
 
 /*
-	*join_free: concatena 'a' y 'b' con ft_strjoin y libera ambas entradas.
-	*Retorno: nueva cadena resultante; NULL si ft_strjoin falla.
-	*Nota: siempre libera 'a' y 'b', incluso si la concatenación falla.
-*/
-char	*join_free(char *a, char *b)
-{
-	char	*res;
-
-	res = ft_strjoin(a, b);
-	free(a);
-	free(b);
-	return (res);
-}
-
-/*
 	*look_for_expands: busca el primer '$' no protegido por comillas simples
 	*y aplica la expansión de variable, reconstruyendo la cadena resultante.
 	*Flujo:
@@ -59,24 +44,6 @@ char	*look_for_expands(char *str, char **cmd_env, t_mini *shell)
 	return (prefix);
 }
 
-/*
-	* expand_commands: Recorre la lista de comandos
-	* si encuentra la llamada a una variable $
-	* busca su valor y lo sustituye liberando el anterior av
-*/
-int	needs_process(const char *s)
-{
-	if (!s)
-		return (0);
-	while (*s)
-	{
-		if (*s == '$' || *s == '\'' || *s == '"')
-			return (1);
-		s++;
-	}
-	return (0);
-}
-
 t_cmd	*expand_commands(t_cmd *cmds, t_mini *shell)
 {
 	t_cmd	*head;
@@ -104,84 +71,61 @@ t_cmd	*expand_commands(t_cmd *cmds, t_mini *shell)
 	return (cmds);
 }
 
-// Devuelve una nueva cadena con $VAR y $? expandidos para here-doc.
-// Reglas: ignora comillas; usa cmd_env -> own_env -> env del shell.
-// helper seguro: concatena y libera solo el left
-static char	*cat_free_left(char *left, const char *right)
+static ssize_t	handle_dollar_at(const char *p, char **out,
+								char **cmd_env, t_mini *shell)
 {
-	char	*cat;
+	ssize_t	n;
 
-	cat = ft_strjoin(left, right);
-	free(left);
-	return (cat);
+	if (p[1] == '?')
+	{
+		if (xcat_take(out, ft_itoa(shell->last_status)) < 0)
+			return (-1);
+		return (2);
+	}
+	n = append_name_at(out, p + 1, cmd_env, shell);
+	if (n < 0)
+		return (-1);
+	return (1 + n);
+}
+
+static int	expand_line_hd_loop(const char *s, char **out,
+								char **cmd_env, t_mini *shell)
+{
+	size_t	i;
+	ssize_t	n;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '$'
+			&& is_valid_dollar_start((unsigned char)s[i + 1]))
+		{
+			n = handle_dollar_at(s + i, out, cmd_env, shell);
+			if (n < 0)
+				return (-1);
+			i += (size_t)n;
+		}
+		else
+		{
+			if (xcat_take(out, ft_substr(s, i, 1)) < 0)
+				return (-1);
+			i++;
+		}
+	}
+	return (1);
 }
 
 char	*expand_line_heredoc(const char *s, char **cmd_env, t_mini *shell)
 {
-	size_t 	i;
-	size_t	j;
 	char	*out;
-	char	*tmp;
-	char	*key;
-	char	*val;
 
 	out = ft_strdup("");
-	i = 0;
 	if (!out)
 		return (NULL);
-	while (s[i])
+	if (expand_line_hd_loop(s, &out, cmd_env, shell) < 0)
 	{
-		if (s[i] == '$' && is_valid_dollar_start((unsigned char)s[i + 1]))
-		{
-			if (s[i + 1] == '?')
-			{
-				tmp = ft_itoa(shell->last_status);
-				if (!tmp)
-				{
-					free(out);
-					return (NULL);
-				}
-                out = cat_free_left(out, tmp);
-                free(tmp);
-				if (!out)
-					return (NULL);
-				i += 2;
-				continue ;
-			}
-			j = i + 1;
-			while (s[j] && (ft_isalnum((unsigned char)s[j]) || s[j] == '_'))
-				j++;
-            key = ft_substr(s + i + 1, 0, j - (i + 1));
-			if (!key)
-			{
-				free(out);
-				return (NULL);
-			}
-			val = get_env_value(key, cmd_env, shell->own_env, shell->env);
-			free(key);
-			if (!val)
-			{
-				free(out);
-				return (NULL);
-			}
-			out = cat_free_left(out, val);
-			free(val);
-			if (!out)
-				return (NULL);
-			i = j;
-			continue ;
-		}
-		tmp = ft_substr(s, i, 1);
-		if (!tmp)
-		{
-			free(out);
-			return (NULL);
-		}
-        out = cat_free_left(out, tmp);
-        free(tmp);
-        if (!out)
-			return (NULL);
-		i++;
+		free(out);
+		return (NULL);
 	}
 	return (out);
 }

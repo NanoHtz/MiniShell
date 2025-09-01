@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   more_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 13:56:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/01 11:16:35 by fgalvez-         ###   ########.fr       */
+/*   Created: 2025/09/01 10:27:58 by fgalvez-          #+#    #+#             */
+/*   Updated: 2025/09/01 10:27:58 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../Inc/minishell.h"
 
-void	sigint_prompt_handler(int sig)
+ssize_t	append_name_at(char **out, const char *p,
+								char **cmd_env, t_mini *shell)
 {
-	(void)sig;
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_redisplay();
-	g_interrupted = 1;
-}
+	size_t	len;
+	char	*key;
+	char	*val;
 
-void	setup_signals(void)
-{
-	signal(SIGINT, sigint_prompt_handler);
-	signal(SIGQUIT, SIG_IGN);
+	len = var_name_len(p);
+	key = ft_substr(p, 0, len);
+	if (!key)
+		return (-1);
+	val = get_env_value(key, cmd_env, shell->own_env, shell->env);
+	free(key);
+	if (xcat_take(out, val) < 0)
+		return (-1);
+	return ((ssize_t)len);
 }

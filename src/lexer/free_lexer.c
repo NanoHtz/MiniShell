@@ -17,11 +17,18 @@
 */
 void	free_lexer(t_lexer *lxr)
 {
+	if (!lxr)
+		return ;
 	if (lxr->input)
+	{
 		free(lxr->input);
+		lxr->input = NULL;
+	}
 	if (lxr->tokens)
+	{
 		clear_tokens(lxr->tokens);
-	lxr->tokens = NULL;
+		lxr->tokens = NULL;
+	}
 }
 
 /*

@@ -39,31 +39,44 @@ int	count_commands(t_cmd *cmds)
 	todo -> El path solo se obtenia si habia un unico comando.
 	todo -> Este cambio añadiendo el builtin ya ha conseguido ejecutarlos bien
 */
-void run_cmds(t_cmd *cmds, t_mini *shell)
+static void	set_commands_path(t_cmd *cmds, char **env)
 {
-	int		len;
 	t_cmd	*cur;
 	char	*curpath;
 
+	cur = cmds;
+	while (cur)
+	{
+		if (cur->av && cur->av[0])
+		{
+			curpath = get_command_path(cur->av[0], env);
+			cur->path = curpath;
+		}
+		else
+		{
+			cur->path = NULL;
+			curpath = NULL;
+			free(curpath);
+		}
+		cur = cur->next;
+	}
+}
+
+void	run_cmds(t_cmd *cmds, t_mini *shell)
+{
+	int		len;
+
+	if (!cmds->av)
+	{
+		execute_commands(cmds, shell);
+		return ;
+	}
 	len = count_commands(cmds);
 	if (len == 1 && is_builtin(cmds->av[0]) && cmds->redirs == NULL)
 	{
 		shell->last_status = exec_builtin(cmds, shell);
 		return ;
 	}
-	cur = cmds;
-	while (cur)
-	{
-		if (cur->av && cur->av[0])
-		{
-			curpath = get_command_path(cur->av[0], shell->env);
-			cur->path = curpath;
-		}
-		else
-			cur->path = NULL;
-		curpath = NULL;
-		free(curpath);
-		cur = cur->next;
-	}
+	set_commands_path(cmds, shell->env);
 	execute_commands(cmds, shell);
 }

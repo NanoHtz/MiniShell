@@ -1,0 +1,16 @@
+<< a >> b
+minishell$ /bin
+/bin: Permission denied                                                       Debe aparecer: /bin: Is a directory, no que no tenemos permiso.
+< EOF                                                                         debe mostrar mensaje de error
+echo "exit_code ->$? user ->$USER home -> $HOME"
+echo 'exit_code ->$? user ->$USER home -> $HOME'
+exit 9999999999999999999999 -> Overrflow y debe dar 255.
+
+Revisar si algunas funciones hacen lo mismo, con el uso de chatgpt al final del prpyecto
+aveces agrega alguna funcion, la sospecha esque ya tenemos algunas que o hacen lo mismo o parecido.
+
+PENDIENTE:
+-Comprobar que la ejecucion es correcta en pipes, redirecciones y heredocs, muchisimas pruebas en todo
+-Comprobar leaks
+-Comprobar norminette
+-Entregar

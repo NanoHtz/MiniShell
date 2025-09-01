@@ -27,7 +27,8 @@ int	validate_redir_target(t_mini *sh, t_list *nx)
 		return (0);
 	}
 	n = (t_token *)nx->content;
-	if (!(n && (n->type == T_WORD || n->type == T_QUOTE || n->type == T_SQUOTE)))
+	if (!(n && (n->type == T_WORD || n->type == T_QUOTE
+				|| n->type == T_SQUOTE)))
 	{
 		if (n && n->value && n->value[0] != '\0')
 			syntax_error(sh, n->value);
@@ -45,28 +46,29 @@ int	validate_redir_target(t_mini *sh, t_list *nx)
 	* 2) Tras el '|', se permiten pares redirección+operando (validados).
 	* 3) Luego debe venir un token “wordish” (inicio de siguiente comando).
 */
-int	handle_pipe_segment(t_list **node, int *saw_cmd,
-				int *prev_was_redir, t_mini *sh)
-{
-	t_token	*t;
+// int	handle_pipe_segment(t_list **node, int *saw_cmd,
+// 				int *prev_was_redir, t_mini *sh)
+// {
+// 	t_token	*t;
 
-	if (!*saw_cmd)
-	{
-		syntax_error(sh, "|");
-		return (0);
-	}
-	*node = (*node)->next;
-	if (!consume_redirs_after_pipe(node, sh))
-		return (0);
-	if (!*node)
-		return (error_value_or_newline_ptr(sh, NULL));
-	t = (t_token *)(*node)->content;
-	if (!is_wordish(t->type))
-		return (error_value_or_newline_ptr(sh, t));
-	*saw_cmd = 0;
-	*prev_was_redir = 0;
-	return (1);
-}
+// 	// if (!*saw_cmd)
+// 	// {
+// 	// 	syntax_error(sh, "|");
+// 	// 	return (0);
+// 	// }
+// 	// fprintf(stderr, "--------paso por aqui----------\n");
+// 	*node = (*node)->next;
+// 	if (!consume_redirs_after_pipe(node, sh))
+// 		return (0);
+// 	if (!*node)
+// 		return (error_value_or_newline_ptr(sh, NULL));
+// 	t = (t_token *)(*node)->content;
+// 	if (!is_wordish(t->type))
+// 		return (error_value_or_newline_ptr(sh, t));
+// 	*saw_cmd = 0;
+// 	*prev_was_redir = 0;
+// 	return (1);
+// }
 
 /*
 	*update_flags_after_token: actualiza las banderas

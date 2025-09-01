@@ -6,7 +6,7 @@
 #    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/08/26 18:58:55 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/09/01 10:53:50 by fgalvez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 NAME         = minishell
 CC           = cc
-CFLAGS       = -Wall -Wextra -Werror -g -O0 #-fsanitize=address
+CFLAGS       = -Wall -Wextra -Werror -g3 #-O0 -fsanitize=address
 
 LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
                -L$(DIR_UTILS) -lutils \
@@ -51,7 +51,6 @@ IGNORED_SRC = src/debugs.c
 NORM_SRCS   = $(filter-out $(IGNORED_SRC),$(SRCS))
 
 SOURCES = $(DIRSOURCE)main.c \
-			$(DIRSOURCE)debugs.c \
 			$(DIR_LEXER)lexer.c \
 			$(DIR_LEXER)types.c \
 			$(DIR_LEXER)tokenice.c \
@@ -69,6 +68,7 @@ SOURCES = $(DIRSOURCE)main.c \
 			$(DIR_PARSER)parser_utils.c \
 			$(DIR_PARSER)parser.c \
 			$(DIR_PARSER)process_token.c \
+			$(DIR_PARSER)process_token_utils.c \
 			$(DIR_VARS)vars.c \
 			$(DIR_VARS)remove_vars.c \
 			$(DIR_VARS)update_envs.c \
@@ -80,6 +80,8 @@ SOURCES = $(DIRSOURCE)main.c \
 			$(DIR_EXPANDS)expands_utils.c \
 			$(DIR_EXPANDS)more_expands_utils.c \
 			$(DIR_EXPANDS)expands.c \
+			$(DIR_EXPANDS)handlers.c \
+			$(DIR_EXPANDS)more_utils.c \
 			$(DIR_UTILSMINI)frees.c \
 			$(DIR_UTILSMINI)env.c \
 			$(DIR_UTILSMINI)status.c \
@@ -99,9 +101,13 @@ SOURCES = $(DIRSOURCE)main.c \
 			$(DIR_EXECUTE)heredoc.c \
 			$(DIR_EXECUTE)heredoc_utils.c \
 			$(DIR_EXECUTE)run_cmds.c \
+			$(DIR_EXECUTE)keys.c \
+			$(DIR_EXECUTE)more_utils_exec.c \
 			$(DIR_EXECUTE)redirections.c \
+			$(DIR_EXECUTE)handle_redirections.c \
 			$(DIR_EXECUTE)execute_commands.c \
 			$(DIR_EXECUTE)path_process.c \
+			$(DIR_EXECUTE)execute_utils.c \
 			$(DIR_SIGNAL)signal.c
 
 # ========================= OBJETOS =========================== #

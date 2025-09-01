@@ -14,6 +14,12 @@
 
 int	g_interrupted = 0;
 
+void	cleanup_and_exit(t_mini *shell, t_lexer *lxr)
+{
+	free_lexer(lxr);
+	exit(shell->last_status);
+}
+
 //*!	-> Aún no se han comparado los errores con los errores esperados.
 //*!	-> Readline da leaks de memoria que no es necesario corregir.
 /*
@@ -60,11 +66,20 @@ void	loop(t_lexer *lxr, t_mini *shell)
 	while (1)
 	{
 		setup_signals();
-		if (g_interrupted)
-			g_interrupted = 0;
+		g_interrupted = 0;
 		line = readline("minishell$ ");
 		if (!line)
-			break ;
+		{
+			write(1, "exit\n", 5);
+			cleanup_and_exit(shell, lxr);
+		}
+		if (g_interrupted)
+			shell->last_status = 130;
+		if (g_interrupted && *line == '\0')
+		{
+			free(line);
+			continue ;
+		}
 		if (!*line)
 		{
 			free(line);

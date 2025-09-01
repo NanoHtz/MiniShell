@@ -95,43 +95,18 @@ int	redir_heredoc(t_redir *r, t_cmd *cmd, t_mini *shell)
 	close(fd);
 	return (0);
 }
-// Meter el type arrastrandolo por el código.
 
-int	handle_redirections(t_cmd *cmd)
+int	handle_heredoc_redir(t_redir *r)
 {
-	t_redir		*r;
-	int			ret;
-
-	if (!cmd)
-		return(0); // Hacer una comprobacion de redireccion.
-	r = cmd->redirs;
-	while (r)
+	if (g_interrupted)
+		return (-1);
+	if (dup2(r->fd, STDIN_FILENO) < 0)
 	{
-		if (r->type == T_RIN)
-			ret = redir_read(r);
-		else if (r->type == T_ROUT)
-			ret = redir_write(r);
-		else if (r->type == T_RAPPEND)
-			ret = redir_append(r);
-		else if (r->type == T_RHEREDOC)
-		{
-			if (g_interrupted)
-				return (-1);
-			if (dup2(r->fd, STDIN_FILENO) < 0)
-			{
-				ft_putstr_fd("minishell: ", 2);
-				perror("dup2");
-				close(r->fd);
-				return (-1);
-			}
-			close(r->fd);
-			ret = 0;
-		}
-		else
-			ret = 0;
-		if (ret < 0)
-			return (-1);
-		r = r->next;
+		ft_putstr_fd("minishell: ", 2);
+		perror("dup2");
+		close(r->fd);
+		return (-1);
 	}
+	close(r->fd);
 	return (0);
 }

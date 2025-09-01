@@ -12,6 +12,23 @@
 
 #include "../../Inc/minishell.h"
 
+int	wait_heredoc(int *pipefd, pid_t pid, t_mini *shell)
+{
+	int		status;
+
+	signal(SIGINT, SIG_IGN);
+	close(pipefd[1]);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		close(pipefd[0]);
+		g_interrupted = 1;
+		shell->last_status = 130;
+		return (-1);
+	}
+	return (0);
+}
+
 int	handle_write_error(char *line, int pipefd[2])
 {
 	free(line);
@@ -37,7 +54,6 @@ int	heredoc_eof_handler(const char *delimiter, char *line, int pipefd[2])
 
 int	heredoc_delim_found(int pipefd[2])
 {
-	// free(line);
 	close(pipefd[1]);
 	return (pipefd[0]);
 }

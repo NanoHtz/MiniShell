@@ -77,28 +77,28 @@ int	sintax_redir(t_list *toks, t_mini *sh)
 	*  - En el resto de tokens, actualiza
 	* banderas con update_flags_after_token().
 */
-int	pipeline_segments(t_list *toks, t_mini *sh)
-{
-	t_token	*t;
-	int		saw_cmd;
-	int		prev_was_redir;
+// int	pipeline_segments(t_list *toks, t_mini *sh)
+// {
+// 	t_token	*t;
+// 	int		saw_cmd;
+// 	int		prev_was_redir;
 
-	saw_cmd = 0;
-	prev_was_redir = 0;
-	while (toks)
-	{
-		t = (t_token *)toks->content;
-		if (t->type == T_PIPE)
-		{
-			if (!handle_pipe_segment(&toks, &saw_cmd, &prev_was_redir, sh))
-				return (0);
-			continue ;
-		}
-		update_flags(t->type, &saw_cmd, &prev_was_redir);
-		toks = toks->next;
-	}
-	return (1);
-}
+// 	saw_cmd = 0;
+// 	prev_was_redir = 0;
+// 	while (toks)
+// 	{
+// 		t = (t_token *)toks->content;
+// 		if (t->type == T_PIPE)
+// 		{
+// 			// if (!handle_pipe_segment(&toks, &saw_cmd, &prev_was_redir, sh))
+// 			// 	return (0);
+// 			continue ;
+// 		}
+// 		update_flags(t->type, &saw_cmd, &prev_was_redir);
+// 		toks = toks->next;
+// 	}
+// 	return (1);
+// }
 
 /*
 	*pipe_space_pipe: detecta el patrón “tubería seguida de tubería” sin

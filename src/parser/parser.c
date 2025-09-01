@@ -81,8 +81,6 @@ t_cmd	*parser(t_list *tokens, t_mini *shell)
 		return (NULL);
 	if (!pipe_space_pipe(tokens, shell))
 		return (NULL);
-	if (!pipeline_segments(tokens, shell))
-		return (NULL);
 	head = new_cmd();
 	run_parse(tokens, head, &last, shell);
 	if (!check_pipe_end(last, shell))

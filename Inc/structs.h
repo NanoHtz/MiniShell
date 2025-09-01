@@ -81,4 +81,11 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct s_hdoc_ctx
+{
+	t_redir	*r;
+	char	**cmd_env;
+	t_mini	*shell;
+}	t_hdoc_ctx;
+
 #endif

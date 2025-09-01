@@ -21,6 +21,8 @@ int	all_vars(char **av)
 	int	i;
 
 	i = 0;
+	if (!av || !*av)
+		return (0);
 	while (av && av[i])
 	{
 		if (!ft_strchr(av[i], '=') || !is_valid(av[i]))
@@ -80,6 +82,8 @@ t_cmd	*vars(t_cmd *cmds, t_mini *shell)
 	while (head)
 	{
 		tmp = head->next;
+		if (!head->av)
+			return (cmds);
 		if (all_vars(head->av))
 		{
 			handle_all_vars(head, shell);

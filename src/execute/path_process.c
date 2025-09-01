@@ -6,7 +6,7 @@
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:42:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/23 19:38:30 by fgalvez-         ###   ########.fr       */
+/*   Updated: 2025/09/01 08:46:06 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,10 @@ char	*try_direct_path(char *cmd)
 {
 	if (!cmd)
 		return (NULL);
-	/* Solo es “ruta directa” si el usuario escribió un path (tiene '/') */
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
-	/* Sin '/', no probar cwd: deja que PATH decida */
 	return (NULL);
 }
-
 
 char	*search_in_paths(char *cmd, char **paths)
 {

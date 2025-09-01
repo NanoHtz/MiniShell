@@ -114,23 +114,6 @@ static int	span_has_quotes(t_list *start, t_list *last)
 	return (0);
 }
 
-/* 2) Último nodo de redirecciones del comando */
-static t_redir	*last_redir_node(t_redir *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
-static t_list	*last_or_self(t_list *candidate, t_list *self)
-{
-	if (candidate)
-		return (candidate);
-	return (self);
-}
-
 int	handle_redir(t_list **node, t_cmd **cur, t_mini *shell)
 {
 	t_token	*tok;
@@ -156,7 +139,6 @@ int	handle_redir(t_list **node, t_cmd **cur, t_mini *shell)
 	*node = last->next;
 	return (1);
 }
-
 
 /*
 	* Lo importante de esta funcion, esque al detectar una pipe

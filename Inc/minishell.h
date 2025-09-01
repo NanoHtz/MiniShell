@@ -53,6 +53,9 @@ int		count_commands(t_cmd *cmds);
 //status.c
 int		syntax_error(t_mini *sh, const char *tok);
 int		syntax_error_unclosed_quote(t_mini *sh, char quote);
+void	handle_command_not_found(t_cmd *cmd, char **exec_env);
+void	handle_directory_error(t_cmd *cmd, char **exec_env);
+void	handle_execve_error(char *cmd_name, char **exec_env);
 //todo ******************************lexer.c***********************************
 //lexer.c
 void	lexer(t_lexer *lexer, const char *input);
@@ -91,13 +94,11 @@ int		run_parse(t_list *tokens, t_cmd *head,
 int		sintax_ops(t_list *toks, t_mini *sh);
 int		sintax_redir(t_list *toks, t_mini *sh);
 int		pipe_space_pipe(t_list *toks, t_mini *sh);
-int		pipeline_segments(t_list *toks, t_mini *sh);
+// int		pipeline_segments(t_list *toks, t_mini *sh);
 int		check_pipe_end(t_token_type last, t_mini *sh);
 //checks_utils.c
 int		validate_redir_target(t_mini *sh, t_list *nx);
 void	update_flags(t_token_type type, int *saw_cmd, int *prev_was_redir);
-int		handle_pipe_segment(t_list **node, int *saw_cmd,
-			int *prev_was_redir, t_mini *sh);
 //more_checks_utils.c
 int		consume_redirs_after_pipe(t_list **node, t_mini *sh);
 int		error_value_or_newline_ptr(t_mini *sh, t_token *tok);
@@ -107,6 +108,9 @@ int		process_token(t_list **node, t_cmd **cur, t_mini *shell);
 int		handle_word(t_list **node, t_cmd **cur, t_mini *shell);
 int		handle_redir(t_list **node, t_cmd **cur, t_mini *shell);
 int		handle_pipe(t_list **node, t_cmd **cur);
+//process_token_utils.c
+t_redir	*last_redir_node(t_redir *lst);
+t_list	*last_or_self(t_list *candidate, t_list *self);
 //handler_word_utils.c
 int		skip_unquoted(char *acc, int had_quote, t_list **node, t_list *last);
 void	scan_following_span(t_list *it_start, t_list **last, int *had_quote);
@@ -180,14 +184,22 @@ int		toggle_squote(char c, int *sq, int dq);
 int		is_valid_dollar_start(unsigned char c);
 //more_expands_utils.c
 t_cmd	*expand_commands(t_cmd *cmds, t_mini *shell);
-int		needs_process(const char *s);
 char	*look_for_expands(char *str, char **cmd_env, t_mini *shell);
-char	*join_free(char *a, char *b);
 char	*expand_line_heredoc(const char *s, char **cmd_env, t_mini *shell);
 //expands.c
 char	*expand_piece(t_token_type type, const char *val,
 			char **cmd_env, t_mini *shell);
 char	*expand_all(const char *s, char **cmd_env, t_mini *shell);
+//handlers.c
+size_t	var_name_len(const char *p);
+int		xcat_take(char **dst, char *right);
+char	*cat_free_left(char *left, const char *right);
+int		needs_process(const char *s);
+char	*join_free(char *a, char *b);
+//more_utils.c
+size_t	var_name_len(const char *p);
+ssize_t	append_name_at(char **out, const char *p,
+			char **cmd_env, t_mini *shell);
 //todo ****************************executor.c*********************************
 //run_cmds.c
 void	run_cmds(t_cmd *cmds, t_mini *shell);
@@ -203,22 +215,42 @@ int		handle_write_error(char *line, int pipefd[2]);
 void	warn_delimiter_eof(const char *delimiter);
 int		heredoc_eof_handler(const char *delimiter, char *line, int pipefd[2]);
 int		heredoc_delim_found(int pipefd[2]);
+int		wait_heredoc(int *pipefd, pid_t pid, t_mini *shell);
 //heredoc.c
 int		handler_heredoc(t_redir *r, char **cmd_env, t_mini *shell);
-int		hdoc_loop_iter(t_redir *r, char **line, size_t *len, int pipefd[2],
-                   char **cmd_env, t_mini *shell);
+int		hdoc_loop_iter(char **line, size_t *len,
+			int pipefd[2], t_hdoc_ctx *ctx);
 void	run_heredoc_loop(t_redir *r, int write_fd, char **env, t_mini *shell);
 //path_process.c
 char	*get_command_path(char *cmd, char **envp);
 char	*search_in_paths(char *cmd, char **paths);
 char	*try_direct_path(char *cmd);
 char	**get_env_paths(char **envp);
-//redirections.c
+//handle_redirections.c
 int		handle_redirections(t_cmd *cmd);
+//redirections.c
 int		redir_heredoc(t_redir *r, t_cmd *cmd, t_mini *shell);
 int		redir_append(t_redir *r);
 int		redir_write(t_redir *r);
 int		redir_read(t_redir *r);
+int		handle_heredoc_redir(t_redir *r);
+//execute_utils.c
+pid_t	while_redir(t_cmd *cmd, t_mini *shell);
+char	**free_charpp(char **v);
+int		connect_pipes(int in_fd, int fd[2], t_cmd *cmd);
+char	**build_and_check_env(t_mini *shell, t_cmd *cmd);
+void	handle_builtin(t_cmd *cmd, t_mini *shell, char **exec_env);
+//keys.c
+size_t	charpp_len(char **v);
+size_t	keylen(const char *s);
+int		same_key(const char *a, const char *b);
+int		process_valid_entry(char **res, char *ov, size_t *r);
+int		process_overlay_entries(char **overlay, char **res,
+			size_t no, size_t *r);
+//more_utils.c
+int		is_directory(char *path);
+int		handle_redirections_check(t_cmd *cmd);
+char	**build_exec_env(char **base, char **overlay);
 //todo ****************************builtin.c**********************************
 //builtin.c
 void	builtin(t_cmd *cmds, t_mini *shell);
