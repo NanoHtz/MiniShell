@@ -100,9 +100,19 @@
 ---
 
 <a id="compilacion"></a>
-## 🛠️ Compilación
+## 🛠️ Descarga y Compilación
 
 ⬇️ Descarga
 ```bash
 git clone git@github.com:NanoHtz/MiniShell.git
+```
+```bash
+make            # compila el ejecutable minishell
+make re         # limpia y recompila desde cero
+make clean      # borra objetos
+make fclean     # borra objetos y el binario
+```
+▶️ Uso
+```bash
+./minishell
 ```
