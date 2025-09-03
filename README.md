@@ -118,6 +118,9 @@ Ejecuta con:
 ```bash
 ./minishell
 ```
+⬇️ Pruebas
+- Para las pruebas recomineod mucho el uso de: https://github.com/LucasKuhn/minishell_tester
+- Recuerda hacer tus propias pruebas, el tester solo es una base, no comprueba adecuadamente los heredocs ni las señales, tampoco los leaks, haz todas las pruebas que se te puedan ocurrir.
 <a id="leaks"></a>
 ## 🧪 Leaks
 Durante las pruebas encontraras que al usar la funcion readline, tendras muchos leaks, estos no han de ser gestionados, para trabajar mas comodamente y no verlos en cada llamada a valgrind, haz lo siguiente:
