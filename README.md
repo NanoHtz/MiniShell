@@ -118,6 +118,7 @@ make fclean     # borra objetos y el binario
 ./minishell
 ```
 <a id="leaks"></a>
+## 🧪 Leaks
 Durante las pruebas encontraras que al usar la funcion readline, tendras muchos leaks, estos no han de ser gestionados, para trabajar mas comodamente y no verlos en cada llamada a valgrind, haz lo siguiente:
 - Crea un archivo en la raiz del repositorio llamado readline.supp (por ejemplo)
 - Introduce lo siguiente:
