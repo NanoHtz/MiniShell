@@ -12,8 +12,7 @@
 - [¿Para qué?](#para-que)
 - [Explicación](#explicacion)
 - [Compilación](#compilacion)
-- [Uso](#uso)
-- [Salida esperada y pruebas](#salida)
+- [Uso y pruebas](#uso)
 - [Leaks](#leaks)
 
 ---
@@ -113,7 +112,9 @@ make re         # limpia y recompila desde cero
 make clean      # borra objetos
 make fclean     # borra objetos y el binario
 ```
-▶️ Uso
+<a id="uso"></a>
+## ▶️ Uso y pruebas
+Ejecuta con:
 ```bash
 ./minishell
 ```
@@ -122,7 +123,7 @@ make fclean     # borra objetos y el binario
 Durante las pruebas encontraras que al usar la funcion readline, tendras muchos leaks, estos no han de ser gestionados, para trabajar mas comodamente y no verlos en cada llamada a valgrind, haz lo siguiente:
 - Crea un archivo en la raiz del repositorio llamado readline.supp (por ejemplo)
 - Introduce lo siguiente:
-- ```
+- ```text
   {
   readline_reachable_linux
   Memcheck:Leak
