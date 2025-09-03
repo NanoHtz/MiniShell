@@ -14,6 +14,7 @@
 - [Compilación](#compilacion)
 - [Uso](#uso)
 - [Salida esperada y pruebas](#salida)
+- [Leaks](#leaks)
 
 ---
 
@@ -116,3 +117,23 @@ make fclean     # borra objetos y el binario
 ```bash
 ./minishell
 ```
+<a id="leaks"></a>
+Durante las pruebas encontraras que al usar la funcion readline, tendras muchos leaks, estos no han de ser gestionados, para trabajar mas comodamente y no verlos en cada llamada a valgrind, haz lo siguiente:
+- Crea un archivo en la raiz del repositorio llamado readline.supp (por ejemplo)
+- Introduce lo siguiente:
+  {
+  readline_reachable_linux
+  Memcheck:Leak
+  match-leak-kinds: reachable,possible
+  ...
+  obj:*libreadline*.so*
+  }
+  {
+  history_reachable_linux
+  Memcheck:Leak
+  match-leak-kinds: reachable,possible
+  ...
+  obj:*libhistory*.so*
+  }
+- En la llamada a valgrind utiiza la siguiente flag: valgrind --suppressions=./supp_readline.supp
+
