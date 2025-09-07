@@ -1,0 +1,36 @@
+{
+  readline_reachable
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:*/libreadline.so*
+}
+{
+  history_reachable
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:*/libhistory.so*
+}
+{
+  ncurses_reachable
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:*/libncurses*.so*
+}
+{
+  tinfo_reachable
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:*/libtinfo.so*
+}
+# Si usas libedit en vez de readline (algunas distros/bsd):
+{
+  libedit_reachable
+  Memcheck:Leak
+  match-leak-kinds: reachable
+  ...
+  obj:*/libedit.so*
+}

@@ -13,6 +13,9 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+# define LIM_POS 9223372036854775807ULL
+# define LIM_NEG 9223372036854775808ULL
+
 //main
 typedef struct s_mini
 {

@@ -58,6 +58,8 @@ void	free_cmds(t_cmd *cmd)
 		tmp = cmd->next;
 		free_args(cmd->av);
 		free_redirs(cmd->redirs);
+		if (cmd->path)
+			free(cmd->path);
 		free(cmd);
 		cmd = tmp;
 	}

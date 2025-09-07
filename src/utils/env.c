@@ -43,3 +43,18 @@ char	**copy_env(char **envp)
 	}
 	return (new_env);
 }
+
+void	free_env(char **env)
+{
+	int	i;
+
+	if (!env)
+		return ;
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		i++;
+	}
+	free(env);
+}

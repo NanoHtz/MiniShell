@@ -12,12 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*is_joinable_token: indica si un token puede concatenarse con el anterior
-	*en la misma “palabra” (mismo contexto, sin separador y
-	de tipo WORD/QUOTE/SQUOTE).
-	*Retorno: 1 si es concatenable; 0 en caso contrario.
-*/
 int	is_joinable_token(t_token *tok)
 {
 	if (!tok || !tok->value)
@@ -29,12 +23,6 @@ int	is_joinable_token(t_token *tok)
 	return (1);
 }
 
-/*
-	*append_next_piece: expande 'tok' y lo concatena a '*acc'.
-	*Memoria: libera '*acc' y la pieza intermedia; en error deja
-	'*acc' liberado.
-	*Retorno: 0 en éxito; -1 en fallo (con '*acc' ya liberado).
-*/
 int	append_next_piece(char **acc, t_token *tok, t_cmd *cur, t_mini *shell)
 {
 	char	*piece;
@@ -55,18 +43,6 @@ int	append_next_piece(char **acc, t_token *tok, t_cmd *cur, t_mini *shell)
 	return (0);
 }
 
-/*
-	*append_span: concatena en '*acc' todas las piezas
-	*expandibles desde 'start'
-	*mientras sean concatenables (WORD/QUOTE/SQUOTE
-	*sin separador).
-	*Usa expand_piece(...) y ft_strjoin(...) vía
-	*append_next_piece(...).
-	*Retorno: 0 en éxito; -1 si falla cualquier
-	*expansión/concatenación.
-	*Nota: si falla, puede haber liberado '*acc'
-	*(igual que el flujo original).
-*/
 int	append_span(char **acc, t_list *start, t_cmd *cur, t_mini *shell)
 {
 	t_token	*tok;

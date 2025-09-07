@@ -14,10 +14,21 @@
 
 int	g_interrupted = 0;
 
-void	cleanup_and_exit(t_mini *shell, t_lexer *lxr)
+void	loop_aux(char *line, t_lexer *lxr, t_mini *shell)
 {
-	free_lexer(lxr);
-	exit(shell->last_status);
+	t_cmd	*cmds;
+
+	add_history(line);
+	lexer(lxr, line);
+	cmds = parser(lxr->tokens, shell);
+	cmds = vars(cmds, shell);
+	if (!cmds)
+	{
+		free_loop(lxr, cmds, line);
+		return ;
+	}
+	run_cmds(cmds, shell);
+	free_loop(lxr, cmds, line);
 }
 
 //*!	-> Aún no se han comparado los errores con los errores esperados.
@@ -61,7 +72,6 @@ t_lexer	*init_mini(void)
 void	loop(t_lexer *lxr, t_mini *shell)
 {
 	char	*line;
-	t_cmd	*cmds;
 
 	while (1)
 	{
@@ -69,10 +79,7 @@ void	loop(t_lexer *lxr, t_mini *shell)
 		g_interrupted = 0;
 		line = readline("minishell$ ");
 		if (!line)
-		{
-			write(1, "exit\n", 5);
-			cleanup_and_exit(shell, lxr);
-		}
+			break ;
 		if (g_interrupted)
 			shell->last_status = 130;
 		if (g_interrupted && *line == '\0')
@@ -85,12 +92,7 @@ void	loop(t_lexer *lxr, t_mini *shell)
 			free(line);
 			continue ;
 		}
-		add_history(line);
-		lexer(lxr, line);
-		cmds = parser(lxr->tokens, shell);
-		cmds = vars(cmds, shell);
-		run_cmds(cmds, shell);
-		free_loop(lxr, cmds, line);
+		loop_aux(line, lxr, shell);
 	}
 }
 

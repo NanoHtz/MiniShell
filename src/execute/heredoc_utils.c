@@ -44,10 +44,9 @@ void	warn_delimiter_eof(const char *delimiter)
 	write(2, "`)\n", 3);
 }
 
-int	heredoc_eof_handler(const char *delimiter, char *line, int pipefd[2])
+int	heredoc_eof_handler(const char *delimiter, int pipefd[2]) // char *line
 {
 	warn_delimiter_eof(delimiter);
-	free(line);
 	close(pipefd[1]);
 	return (pipefd[0]);
 }

@@ -12,10 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*Inicializacion de un nuevo comando, se inicializa
-	cada parte de la struct
-*/
 t_cmd	*new_cmd(void)
 {
 	t_cmd	*cmd;
@@ -25,15 +21,14 @@ t_cmd	*new_cmd(void)
 		return (NULL);
 	cmd->av = NULL;
 	cmd->ac = 0;
+	cmd->len = 0;
 	cmd->redirs = NULL;
 	cmd->next = NULL;
+	cmd->path = NULL;
 	cmd->cmd_env = NULL;
 	return (cmd);
 }
 
-/*
- * Un selector de las redirecciones, necesaria solamente por la norminette
- */
 t_rtype	take_type(t_token_type tt)
 {
 	if (tt == T_REDIR_IN)

@@ -12,14 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*redir_setup: valida y prepara el manejo de una redirección.
-	*Acciones:
-	* 1) Comprueba que el token actual sea una redirección y
-	*obtiene su tipo (rt).
-	* 2) Guarda el lexema del operador (op) y avanza '*node' al operando.
-	* 3) Verifica que el operando exista y sea WORD/QUOTE/SQUOTE.
-*/
 int	redir_setup(t_list **node, t_rtype *rt, t_token **tok)
 {
 	const char	*op;
@@ -37,11 +29,6 @@ int	redir_setup(t_list **node, t_rtype *rt, t_token **tok)
 	return (1);
 }
 
-/*
-	*expand_first_piece_node: expande la primera pieza del operando de
-	*redirección (el token en '*node') con el entorno del comando actual.
-	*Retorna la cadena expandida o NULL si falla.
-*/
 char	*expand_first_piece_node(t_list *node, t_cmd *cur, t_mini *shell)
 {
 	t_token	*tok;
@@ -50,10 +37,6 @@ char	*expand_first_piece_node(t_list *node, t_cmd *cur, t_mini *shell)
 	return (expand_piece(tok->type, tok->value, cur->cmd_env, shell));
 }
 
-/*
-	*span_last_joinable: devuelve el último nodo consecutivo “unible” a partir
-	*de 'start' (WORD/QUOTE/SQUOTE sin separador). Si no hay, retorna NULL.
-*/
 t_list	*span_last_joinable(t_list *start)
 {
 	t_list	*last;
@@ -71,9 +54,6 @@ t_list	*span_last_joinable(t_list *start)
 	return (last);
 }
 
-/*
- * Crea un nodo de la lista de redirecciones.
- */
 t_redir	*new_redir_node(t_rtype type, const char *target)
 {
 	t_redir	*r;
@@ -95,9 +75,6 @@ t_redir	*new_redir_node(t_rtype type, const char *target)
 	return (r);
 }
 
-/*
- * Añade el nodo al final de la lista de redirecciones.
- */
 void	add_redir(t_cmd *cmd, t_redir *redir)
 {
 	t_redir	*it;

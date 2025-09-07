@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:41:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/01 09:13:33 by fgalvez-         ###   ########.fr       */
+/*   Updated: 2025/09/06 19:34:34 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	hdoc_loop_iter(char **line, size_t *len, int pipefd[2], t_hdoc_ctx *ctx)
 		return (handle_write_error(*line, pipefd));
 	n = getline(line, len, stdin);
 	if (n < 0)
-		return (heredoc_eof_handler(ctx->r->target, *line, pipefd));
+		return (heredoc_eof_handler(ctx->r->target, pipefd));
 	if (n > 0 && (*line)[n - 1] == '\n')
 		(*line)[n - 1] = '\0';
 	if (ft_strcmp(*line, ctx->r->target) == 0)

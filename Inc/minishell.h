@@ -32,6 +32,9 @@ void	ms_fix_shlvl(char ***penv);
 void	run_cmds(t_cmd *cmds, t_mini *shell);
 void	loop(t_lexer *lxr, t_mini *shell);
 void	clear_mini(t_lexer *lxr, t_mini *shell);
+void	loop_aux(char *line, t_lexer *lxr, t_mini *shell);
+//main_utils.c
+void	cleanup_and_exit(t_mini *shell, t_lexer *lxr);
 //debugs.c
 void	debug_print_tokens(t_lexer *lxr);
 void	debug_print_cmds(t_cmd *cmds);
@@ -43,6 +46,7 @@ void	debug_tokens(t_list *tokens);
 //todo ******************************utils.c***********************************
 //env.c
 char	**copy_env(char **envp);
+void	free_env(char **env);
 //frees.c
 void	free_cmd(t_cmd *cmd);
 void	free_cmds(t_cmd *cmd);
@@ -213,7 +217,7 @@ void	wait_for_children(pid_t last_pid, t_mini *shell);
 //heredoc_utils.c
 int		handle_write_error(char *line, int pipefd[2]);
 void	warn_delimiter_eof(const char *delimiter);
-int		heredoc_eof_handler(const char *delimiter, char *line, int pipefd[2]);
+int		heredoc_eof_handler(const char *delimiter, int pipefd[2]); //char *line
 int		heredoc_delim_found(int pipefd[2]);
 int		wait_heredoc(int *pipefd, pid_t pid, t_mini *shell);
 //heredoc.c
@@ -294,7 +298,7 @@ char	**dup_env(char **env);
 void	sort_strings(char **a);
 //todo *********************signal.c******************************
 //signal.c
-void	sigint_heredoc_handler(int sig);
+// void	sigint_heredoc_handler(int sig);
 void	sigint_prompt_handler(int sig);
 void	setup_signals(void);
 

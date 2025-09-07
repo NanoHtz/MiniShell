@@ -3,18 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+         #
+#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/08 14:04:17 by fgalvez-          #+#    #+#              #
-#    Updated: 2025/09/01 10:53:50 by fgalvez-         ###   ########.fr        #
+#    Updated: 2025/09/06 19:04:01 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # ========================= VARIABLES GLOBALES =============================== #
 
+ASAN_CFLAGS  = -g -O0 -fsanitize=address -fno-omit-frame-pointer
+ASAN_LDFLAGS = -fsanitize=address
+ASAN_ENV     = ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+
 NAME         = minishell
 CC           = cc
-CFLAGS       = -Wall -Wextra -Werror -g3 #-O0 -fsanitize=address
+CFLAGS       = -Wall -Wextra -Werror -g3 -O0 -fsanitize=address
 
 LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
                -L$(DIR_UTILS) -lutils \
@@ -22,8 +26,8 @@ LIBS_FLAGS   = -L$(DIR_LIBFT) -lft \
 
 RM           = rm -f
 NORMINETTE   = norminette
-VALGRING     = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
-VALGRING_OUT = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind_output
+VALGRING     = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+           --suppressions=readline.supp
 
 # ========================= DIRECTORIOS Y ARCHIVOS =========================== #
 
@@ -85,6 +89,7 @@ SOURCES = $(DIRSOURCE)main.c \
 			$(DIR_UTILSMINI)frees.c \
 			$(DIR_UTILSMINI)env.c \
 			$(DIR_UTILSMINI)status.c \
+			$(DIR_UTILSMINI)main_utils.c \
 			$(DIR_BUILTIN)builtin.c \
 			$(DIR_BUILTIN)fix_shlvl.c \
 			$(DIR_BUILTIN)utils.c \
@@ -133,7 +138,7 @@ all: libft utils $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "\n${MAGENTA}Compilando el ejecutable $(NAME)...${RESET}\n"
-	$(CC) $(OBJS) $(CFLAGS) $(LIBS_FLAGS) -o $(NAME)
+	$(CC) $(OBJS) $(CFLAGS) $(LIBS_FLAGS) $(LDFLAGS) -o $(NAME)
 	@echo "${CYAN}=================================================================================================================${RESET}"
 	@echo "${GREEN}                                       [✔] $(NAME) successfully compiled.${RESET}                               "
 	@echo "${CYAN}=================================================================================================================${RESET}"
@@ -217,31 +222,18 @@ fclean: clean
 re: fclean all
 
 # ========================= OTRAS REGLAS ===================================== #
-n:
-	@$(MAKE) --no-print-directory -C $(DIR_LIBFT) n
-	@$(MAKE) --no-print-directory -C $(DIR_UTILS) n
-	@echo "\n${CYAN}=================================${RESET}"
-	@echo "${GREEN}    Norminette de Minishell    ${RESET}"
-	@echo "${CYAN}=================================${RESET}"
-	-$(NORMINETTE) $(HEADERS) $(NORM_SRCS)
-	@echo "${GREEN}[✔] Norminette completa.${RESET}\n"
 
 val: all
 	@echo "\n${MAGENTA}Ejecutando Valgrind en ./$(NAME)...${RESET}\n"
 	$(VALGRING) ./$(NAME)
 
-valo: all
-	@echo "\n${MAGENTA}Ejecutando Valgrind en ./$(NAME)...${RESET}\n"
-	$(VALGRING_OUT) ./$(NAME)
+asan: fclean
+	@echo "$(MAGENTA)Compilando con AddressSanitizer...$(RESET)"
+	$(MAKE) --no-print-directory \
+		CFLAGS="$(CFLAGS) $(ASAN_CFLAGS)" \
+		LDFLAGS="$(LDFLAGS) $(ASAN_LDFLAGS)" \
+		all
 
-ex: all
-	@echo "\n${MAGENTA}Ejecutando.../$(NAME)...${RESET}\n"
-	NOMBRE=FERNANDOGALVEZGORBE Edad=28 ./$(NAME)
-
-deadcode:
-	$(MAKE) fclean
-	$(MAKE) CFLAGS+=' -O2 -ffunction-sections -fdata-sections -fno-inline' \
-	        LDFLAGS+=' -Wl,--gc-sections -Wl,--print-gc-sections -Wl,-Map=dead.map' \
-	        2>dead.link.log
-	@grep -oP "removing unused section '.text.\\K[^']+" dead.link.log | sort -u > unused_functions.txt || true
-	@echo "≫ Posibles funciones no usadas en unused_functions.txt (mapa: dead.map)"
+sani: asan
+	@echo "$(MAGENTA)Ejecutando con AddressSanitizer...$(RESET)"
+	$(ASAN_ENV) ./$(NAME)

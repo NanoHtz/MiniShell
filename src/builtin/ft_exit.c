@@ -12,15 +12,86 @@
 
 #include "../../Inc/minishell.h"
 
+static int	parse_sign(const char *s, int *i_out, int *neg_out)
+{
+	int	i;
+	int	neg;
+
+	i = 0;
+	neg = 0;
+	if (s[i] == '+' || s[i] == '-')
+	{
+		neg = (s[i] == '-');
+		i++;
+	}
+	*i_out = i;
+	*neg_out = neg;
+	return (1);
+}
+
+static int	would_overflow(unsigned long long acc, unsigned int d, int neg)
+{
+	unsigned long long	lim;
+
+	if (neg)
+		lim = LIM_NEG;
+	else
+		lim = LIM_POS;
+	if (acc > lim / 10)
+		return (1);
+	if (acc == lim / 10 && (unsigned long long)d > lim % 10)
+		return (1);
+	return (0);
+}
+
+static int	parse_digits(const char *s, int i, int neg, unsigned long long *out)
+{
+	unsigned long long	acc;
+	unsigned int		d;
+
+	acc = 0;
+	while (s[i])
+	{
+		if (!ft_isdigit((unsigned char)s[i]))
+			return (0);
+		d = (unsigned int)(s[i] - '0');
+		if (would_overflow(acc, d, neg))
+			return (0);
+		acc = acc * 10 + d;
+		i++;
+	}
+	*out = acc;
+	return (1);
+}
+
+static int	parse_ll_with_overflow(const char *s, long long *out)
+{
+	int					i;
+	int					neg;
+	unsigned long long	acc;
+
+	if (!s || !s[0])
+		return (0);
+	parse_sign(s, &i, &neg);
+	if (!ft_isdigit((unsigned char)s[i]))
+		return (0);
+	if (!parse_digits(s, i, neg, &acc))
+		return (0);
+	if (neg)
+		*out = -(long long)acc;
+	else
+		*out = (long long)acc;
+	return (1);
+}
+
 int	ft_exit(t_cmd *cmd, t_mini *shell)
 {
-	int	code;
+	long long	ll;
+	int			code;
 
-	ft_putendl_fd("exit", 1);
-	code = 0;
 	if (cmd->ac == 1)
 		exit(shell->last_status);
-	if (!ft_isnum(cmd->av[1]))
+	if (!parse_ll_with_overflow(cmd->av[1], &ll))
 	{
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(cmd->av[1], 2);
@@ -32,6 +103,6 @@ int	ft_exit(t_cmd *cmd, t_mini *shell)
 		ft_putendl_fd("exit: too many arguments", 2);
 		return (1);
 	}
-	code = ft_atoi(cmd->av[1]);
-	exit((unsigned char)code);
+	code = (int)(unsigned char)ll;
+	exit(code);
 }

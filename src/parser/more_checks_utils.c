@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*consume_redirs_after_pipe: desde el token actual (tras un '|'), consume
-	*posibles pares de redirección + operando, validando que el operando sea
-	*“wordish”. Avanza *node hasta el primer token no redirección.
-*/
 int	consume_redirs_after_pipe(t_list **node, t_mini *sh)
 {
 	t_list	*nx;
@@ -35,11 +30,6 @@ int	consume_redirs_after_pipe(t_list **node, t_mini *sh)
 	return (1);
 }
 
-/*
-	*error_value_or_newline_ptr: informa de error usando el lexema si el puntero
-	*existe (aunque sea vacío); si no existe, informa "newline".
-	*Uso: para el token inmediatamente después del bloque de redirecciones.
-*/
 int	error_value_or_newline_ptr(t_mini *sh, t_token *tok)
 {
 	if (tok && tok->value)
@@ -49,11 +39,6 @@ int	error_value_or_newline_ptr(t_mini *sh, t_token *tok)
 	return (0);
 }
 
-/*
-	*error_value_or_newline_strict: informa de error usando el lexema si existe
-	*y no está vacío; en caso contrario informa "newline".
-	*Uso: para validar operandos de redirección, que no pueden ser vacíos.
-*/
 int	error_value_or_newline_strict(t_mini *sh, t_token *tok)
 {
 	if (tok && tok->value && tok->value[0] != '\0')

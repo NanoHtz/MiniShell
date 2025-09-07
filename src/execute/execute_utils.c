@@ -6,7 +6,7 @@
 /*   By: fgalvez- <fgalvez-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 19:50:11 by pabferna          #+#    #+#             */
-/*   Updated: 2025/09/01 10:43:59 by fgalvez-         ###   ########.fr       */
+/*   Updated: 2025/09/06 20:12:15 by fgalvez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	handle_builtin(t_cmd *cmd, t_mini *shell, char **exec_env)
 	shell->env = exec_env;
 	st = exec_builtin(cmd, shell);
 	shell->env = saved;
-	free_charpp(exec_env);
 	_exit(st);
 }
 

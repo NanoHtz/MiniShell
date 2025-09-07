@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*validate_redir_target: comprueba que tras una redirección haya un
-	*operando válido (palabra o texto entrecomillado).
-	*informa del error con el lexema correspondiente o "newline".
-*/
 int	validate_redir_target(t_mini *sh, t_list *nx)
 {
 	t_token	*n;
@@ -39,40 +34,6 @@ int	validate_redir_target(t_mini *sh, t_list *nx)
 	return (1);
 }
 
-/*
-	*handle_pipe_segment: gestiona la validación al encontrar un '|'.
-	*Reglas:
-	* 1) Debe haber aparecido un comando antes del '|'.
-	* 2) Tras el '|', se permiten pares redirección+operando (validados).
-	* 3) Luego debe venir un token “wordish” (inicio de siguiente comando).
-*/
-// int	handle_pipe_segment(t_list **node, int *saw_cmd,
-// 				int *prev_was_redir, t_mini *sh)
-// {
-// 	t_token	*t;
-
-// 	// if (!*saw_cmd)
-// 	// {
-// 	// 	syntax_error(sh, "|");
-// 	// 	return (0);
-// 	// }
-// 	// fprintf(stderr, "--------paso por aqui----------\n");
-// 	*node = (*node)->next;
-// 	if (!consume_redirs_after_pipe(node, sh))
-// 		return (0);
-// 	if (!*node)
-// 		return (error_value_or_newline_ptr(sh, NULL));
-// 	t = (t_token *)(*node)->content;
-// 	if (!is_wordish(t->type))
-// 		return (error_value_or_newline_ptr(sh, t));
-// 	*saw_cmd = 0;
-// 	*prev_was_redir = 0;
-// 	return (1);
-// }
-
-/*
-	*update_flags_after_token: actualiza las banderas
-*/
 void	update_flags(t_token_type type, int *saw_cmd, int *prev_was_redir)
 {
 	if (is_redir(type))
