@@ -5,6 +5,10 @@
 
 <p align="center"><i>🖥️ Minishell (42 Cursus) — Intérprete de shell en C con lexer/parser, pipes, redirecciones, expansión de variables, heredoc, señales y built-ins (comportamiento tipo bash).</i></p>
 
+<p align="center">
+    <img src="https://github.com/NanoHtz/Assets/blob/main/minishell/mini.gif?raw=1"
+       alt="Demostración del proyecto FdF" width="800">
+</p>
 ---
 
 ## Índice
