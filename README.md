@@ -9,7 +9,9 @@
     <img src="https://github.com/NanoHtz/Assets/blob/main/minishell/mini.gif?raw=1"
        alt="Demostración del proyecto FdF" width="800">
 </p>
----
+<p align="center">
+  <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/100.png" alt="mini nota" height="120">
+</p>
 
 ## Índice
 - [Resumen](#resumen)
@@ -25,6 +27,15 @@
 ## ✅ Resumen del proyecto
 
 **Minishell** es un shell interactivo escrito en C. Implementa **tokenización y parseo**, **pipes y redirecciones** (`|`, `>`, `>>`, `<`, `<<`), **expansión de variables** (incl. `$?`), **comillas simples/dobles**, **heredoc** y **built-ins** (`cd`, `echo`, `pwd`, `env`, `export`, `unset`, `exit`). Maneja **señales** como `Ctrl+C` y reproduce el comportamiento esencial de **bash** (códigos de salida y mensajes de error incluidos).
+
+> Este proyecto sigue la **Norma oficial de 42** para estilo en C (Norminette).
+> En todos los proyectos de 42, el uso de la gran mayoria de bibliotecas esta prohibido, siendo nuestro propio desarrollo libft el sustituto de las funciones básicas. 
+> - Código legible.  
+> - Funciones pequeñas (<25 líneas),
+> - 4 parámetros por función,
+> - Nombres claros en `snake_case` y en inglés.
+> - 1 responsabilidad por función.
+>  - Variables declaradas al inicio del bloque(maximo 4 por función). 
 
 ---
 
