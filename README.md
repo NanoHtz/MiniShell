@@ -59,11 +59,11 @@
   <summary><h3>📝 Explicación</h3></summary>
 
 <b>🧭 Flujo general</b><br>
-1) Leer línea → 2) Tokenizar/parsear → 3) Expandir variables → 4) Preparar redirecciones/pipes → 5) Ejecutar (built-ins o <i>execve</i>) → 6) Esperar hijos → 7) Mostrar prompt de nuevo.
+1) Leer línea → 2) Tokenizar -> 3) Parsear → 4) Expandir variables → 5) Preparar redirecciones/pipes → 6) Ejecutar (built-ins o <i>execve</i>) → 7) Mostrar prompt de nuevo.
 <br><br>
 
 <b>🧾 Lexer & Parser</b><br>
-• Se separa en <b>tokens</b> (palabras, <code>|</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code>).<br>
+• Se separa en <b>tokens</b> con una enum (palabras, <code>|</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code>).<br>
 • <b>Comillas</b>: <code>' '</code> desactiva toda expansión; <code>" "</code> mantiene expansión de <code>$VAR</code> y respeta espacios internos.<br>
 • Se construye una estructura por <b>comando</b> con su argv, redirecciones y, si procede, conexiones de <b>pipe</b>.
 <br><br>
