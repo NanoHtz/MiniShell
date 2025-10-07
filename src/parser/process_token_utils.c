@@ -27,3 +27,14 @@ t_list	*last_or_self(t_list *candidate, t_list *self)
 		return (candidate);
 	return (self);
 }
+
+int	add_arg_and_free(t_cmd *cur, char *acc)
+{
+	if (add_arg(cur, acc) == 1)
+	{
+		free(acc);
+		return (-1);
+	}
+	free(acc);
+	return (0);
+}

@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* ft_pwd: imprime la ruta actual
-*/
 void	ft_pwd(void)
 {
 	char	*pwd;

@@ -35,15 +35,7 @@ void	clear_mini(t_lexer *lxr, t_mini *shell);
 void	loop_aux(char *line, t_lexer *lxr, t_mini *shell);
 //main_utils.c
 void	cleanup_and_exit(t_mini *shell, t_lexer *lxr);
-//debugs.c
-void	debug_print_tokens(t_lexer *lxr);
-void	debug_print_cmds(t_cmd *cmds);
-void	debug_print_env(char **env, const char *label);
-void	debug_print_expanded_cmds(t_cmd *cmds);
-void	print_own_env2(char **own_env);
-void	debug_exec_plan(const t_cmd *cmds);
-void	debug_tokens(t_list *tokens);
-//todo ******************************utils.c***********************************
+// ******************************utils.c***********************************
 //env.c
 char	**copy_env(char **envp);
 void	free_env(char **env);
@@ -60,7 +52,7 @@ int		syntax_error_unclosed_quote(t_mini *sh, char quote);
 void	handle_command_not_found(t_cmd *cmd, char **exec_env);
 void	handle_directory_error(t_cmd *cmd, char **exec_env);
 void	handle_execve_error(char *cmd_name, char **exec_env);
-//todo ******************************lexer.c***********************************
+// ******************************lexer.c***********************************
 //lexer.c
 void	lexer(t_lexer *lexer, const char *input);
 void	init_lexer(t_lexer *lexer, const char *input);
@@ -89,7 +81,7 @@ int		take_three(const char *line, int i, char op);
 //free_lexer.c
 void	free_lexer(t_lexer *lxr);
 void	clear_tokens(t_list *lst);
-//todo ******************************parser.c***********************************
+// ******************************parser.c***********************************
 //parser.c
 t_cmd	*parser(t_list *tokens, t_mini *shell);
 int		run_parse(t_list *tokens, t_cmd *head,
@@ -115,12 +107,12 @@ int		handle_pipe(t_list **node, t_cmd **cur);
 //process_token_utils.c
 t_redir	*last_redir_node(t_redir *lst);
 t_list	*last_or_self(t_list *candidate, t_list *self);
+int		add_arg_and_free(t_cmd *cur, char *acc);
 //handler_word_utils.c
 int		skip_unquoted(char *acc, int had_quote, t_list **node, t_list *last);
 void	scan_following_span(t_list *it_start, t_list **last, int *had_quote);
 int		add_arg(t_cmd *cmd, const char *value);
 char	**grow_argv(t_cmd *cmd);
-
 //handler_redir_utils.c
 int		redir_setup(t_list **node, t_rtype *rt, t_token **tok);
 char	*expand_first_piece_node(t_list *node, t_cmd *cur, t_mini *shell);
@@ -140,7 +132,7 @@ t_rtype	take_type(t_token_type tt);
 t_cmd	*new_cmd(void);
 int		is_redir(t_token_type t);
 int		is_wordish(t_token_type t);
-//todo ****************************variables*********************************
+// ****************************variables*********************************
 //vars.c
 t_cmd	*vars(t_cmd	*cmds, t_mini *shell);
 void	handle_all_vars(t_cmd *cmd, t_mini *shell);
@@ -173,7 +165,7 @@ int		join_status(char **out, const char *status);
 int		is_quote_char(char ch, int sq, int dq);
 void	toggle_quotes(char ch, int *sq, int *dq);
 int		should_expand(const char *s, int i, int sq);
-//todo ****************************expands.c*********************************
+// ****************************expands.c*********************************
 //command_expands.c
 char	*extract_var(char *str, char **cmd_env, t_mini *shell, int *var_len);
 int		scan_var_name(const char *var);
@@ -204,7 +196,7 @@ char	*join_free(char *a, char *b);
 size_t	var_name_len(const char *p);
 ssize_t	append_name_at(char **out, const char *p,
 			char **cmd_env, t_mini *shell);
-//todo ****************************executor.c*********************************
+// ****************************executor.c*********************************
 //run_cmds.c
 void	run_cmds(t_cmd *cmds, t_mini *shell);
 int		count_commands(t_cmd *cmds);
@@ -255,7 +247,7 @@ int		process_overlay_entries(char **overlay, char **res,
 int		is_directory(char *path);
 int		handle_redirections_check(t_cmd *cmd);
 char	**build_exec_env(char **base, char **overlay);
-//todo ****************************builtin.c**********************************
+// ****************************builtin.c**********************************
 //builtin.c
 void	builtin(t_cmd *cmds, t_mini *shell);
 int		exec_builtin(t_cmd *cmd, t_mini *shell);
@@ -296,7 +288,7 @@ void	print_export_no_args(char **env);
 //utils.c
 char	**dup_env(char **env);
 void	sort_strings(char **a);
-//todo *********************signal.c******************************
+// *********************signal.c******************************
 //signal.c
 // void	sigint_heredoc_handler(int sig);
 void	sigint_prompt_handler(int sig);

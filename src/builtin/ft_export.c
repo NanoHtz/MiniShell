@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* remove_entry: elimina una variable.
-*/
 void	remove_entry(char ***env, int index)
 {
 	char	**new_env;
@@ -28,10 +25,6 @@ void	remove_entry(char ***env, int index)
 	*env = new_env;
 }
 
-/*
-	* export_keyval: añade una variable a un entorno
-	* lo borra del otro.
-*/
 static void	export_keyval(char *arg, t_mini *shell)
 {
 	char	*key;
@@ -51,10 +44,6 @@ static void	export_keyval(char *arg, t_mini *shell)
 	free(key);
 }
 
-/*
-	* export_variable: añade una variable a un entorno
-	* lo borra del otro.
-*/
 static void	export_variable(char *arg, t_mini *shell)
 {
 	int		idx;
@@ -77,18 +66,6 @@ static void	export_variable(char *arg, t_mini *shell)
 	}
 }
 
-/*
-	*process_export_arg: procesa un argumento de 'export'.
-	*Comportamiento:
-	*  - Si contiene '=', valida la clave (get_key + ms_is_valid_ident).
-	*    En caso válido, llama a export_keyval(arg, shell).
-	*    En caso inválido, imprime ms_export_err_ident y marca *had_err=1.
-	*  - Si no contiene '=', valida el identificador completo; si es válido,
-	*    llama a export_variable(arg, shell); si no,
-	* reporta error y marca *had_err.
-	*Memoria:
-	*  - Libera 'key' devuelto por get_key en todos los caminos donde proceda.
-*/
 static void	process_export_arg(char *arg, t_mini *shell, int *had_err)
 {
 	char	*key;
@@ -117,16 +94,6 @@ static void	process_export_arg(char *arg, t_mini *shell, int *had_err)
 	export_variable(arg, shell);
 }
 
-/*
-	*ft_export: implementa el builtin 'export'.
-	*Casos:
-	*  - Sin argumentos (o args[1] NULL): lista el entorno exportable.
-	*  - Con argumentos: procesa cada 'clave' o 'clave=valor' validando
-	*    identificadores y reportando errores de forma acumulada.
-	*Retorno:
-	*  - 0 si todos los argumentos fueron válidos o no había argumentos.
-	*  - 1 si al menos un argumento fue inválido.
-*/
 int	ft_export(char **args, t_mini *shell)
 {
 	int	i;

@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*Funcion de limpieza del lexer
-*/
 void	free_lexer(t_lexer *lxr)
 {
 	if (!lxr)
@@ -31,10 +28,6 @@ void	free_lexer(t_lexer *lxr)
 	}
 }
 
-/*
-	*clear_tokens:
-	*Libera todos los tokens.
-*/
 void	clear_tokens(t_list *lst)
 {
 	t_list	*next;

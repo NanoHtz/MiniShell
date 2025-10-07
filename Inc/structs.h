@@ -16,7 +16,6 @@
 # define LIM_POS 9223372036854775807ULL
 # define LIM_NEG 9223372036854775808ULL
 
-//main
 typedef struct s_mini
 {
 	char	**env;
@@ -24,7 +23,6 @@ typedef struct s_mini
 	int		last_status;
 }	t_mini;
 
-//lexer
 typedef enum e_token_type
 {
 	T_WORD,
@@ -54,7 +52,6 @@ typedef struct s_lexer
 	int			sep;
 }	t_lexer;
 
-//parser
 typedef enum e_redir_type
 {
 	T_RIN,

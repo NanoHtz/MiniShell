@@ -12,17 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*look_for_expands: busca el primer '$' no protegido por comillas simples
-	*y aplica la expansión de variable, reconstruyendo la cadena resultante.
-	*Flujo:
-	* 1) Si no hay '$' “válido”, devuelve una copia de 'str'.
-	* 2) Extrae el valor y la longitud consumida (var_len) con extract_var().
-	*    Si no hay valor expandible, devuelve una copia de 'str'.
-	* 3) Construye: prefix = str[0 .. pos), suffix = pos + var_len.
-	* 4) Devuelve join_free(join_free(prefix, value), suffix).
-	*Retorno: nueva cadena asignada que el llamador debe liberar.
-*/
 char	*look_for_expands(char *str, char **cmd_env, t_mini *shell)
 {
 	char	*value;

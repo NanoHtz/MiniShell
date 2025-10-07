@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*join_free: concatena 'a' y 'b' con ft_strjoin y libera ambas entradas.
-	*Retorno: nueva cadena resultante; NULL si ft_strjoin falla.
-	*Nota: siempre libera 'a' y 'b', incluso si la concatenación falla.
-*/
 char	*join_free(char *a, char *b)
 {
 	char	*res;
@@ -27,11 +22,6 @@ char	*join_free(char *a, char *b)
 	return (res);
 }
 
-/*
-	* expand_commands: Recorre la lista de comandos
-	* si encuentra la llamada a una variable $
-	* busca su valor y lo sustituye liberando el anterior av
-*/
 int	needs_process(const char *s)
 {
 	if (!s)
@@ -45,9 +35,6 @@ int	needs_process(const char *s)
 	return (0);
 }
 
-// Devuelve una nueva cadena con $VAR y $? expandidos para here-doc.
-// Reglas: ignora comillas; usa cmd_env -> own_env -> env del shell.
-// helper seguro: concatena y libera solo el left
 char	*cat_free_left(char *left, const char *right)
 {
 	char	*cat;

@@ -12,10 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* get_key: busca el = de la asignacion
-	* retorna todo lo anterior.
-*/
 char	*get_key(const char *assign)
 {
 	char	*equal;
@@ -28,13 +24,6 @@ char	*get_key(const char *assign)
 	return (ft_substr(assign, 0, len));
 }
 
-/*
-	* find_key_index: busca la asignacion.
-	*compara dentro del entorno si la variable ya existe
-	*en caso de que exista, devuelve su posicion dentro de env
-	*util si se quiere modificar una asignacion
-	*eliminarla(unset etc...)
-*/
 int	find_key_index(char **env, const char *key)
 {
 	int		i;
@@ -53,11 +42,6 @@ int	find_key_index(char **env, const char *key)
 	return (-1);
 }
 
-/*
-	* append_entry: añade una entrada en el entorno.
-	* reserva memoria para todo el nuevo entorno, mas el null + la nueva
-	* copia todo el anterior entorno y añade al final la nueva asignacion
-*/
 void	append_entry(char ***env, const char *assign)
 {
 	int		i;
@@ -81,11 +65,6 @@ void	append_entry(char ***env, const char *assign)
 	*env = new_env;
 }
 
-/*
-	* replace_entry: reemplaza la asignacion
-	* Libera la asignacion anterior, con el index calculado anteriormente
-	* el mismo index, pasa ahora a gtener la nueva asignacion
-*/
 void	replace_entry(char **env, int index, const char *assign)
 {
 	free(env[index]);

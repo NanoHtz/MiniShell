@@ -45,7 +45,6 @@ char	**copy_env_without_index(char **env, int index)
 	return (new_env);
 }
 
-/* valida nombre de variable: 1ª letra [A-Za-z_] y resto [A-Za-z0-9_] */
 int	ms_is_valid_ident(const char *s)
 {
 	int	i;
@@ -71,7 +70,6 @@ void	ms_export_err_ident(const char *arg)
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
-/* key == "_" ? */
 int	is_underscore_entry(const char *s)
 {
 	int	i;

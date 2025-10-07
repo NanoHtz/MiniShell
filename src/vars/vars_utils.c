@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*is_valid: comprueba que es una asignacion válida.
-	* que el primer elemento sea alfabetico o _
-	* que sea alfanumerico o _ los siguientes
-*/
 int	is_valid(const char *str)
 {
 	int	i;
@@ -38,10 +33,6 @@ int	is_valid(const char *str)
 	return (1);
 }
 
-/*
-	* count_valid_envs: cuenta cuantas asignaciones validas
-	* tiene el comando
-*/
 int	count_valid_envs(char **av)
 {
 	int	i;
@@ -58,9 +49,6 @@ int	count_valid_envs(char **av)
 	return (count);
 }
 
-/*
-	* count_non_env_args: cuenta
-*/
 int	count_non_env_args(char **av)
 {
 	int	i;

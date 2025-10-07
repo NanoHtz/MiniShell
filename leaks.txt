@@ -1,6 +1,0 @@
-LEAKS:
-
-Tensmo still recheable en todas las ejecuciones.
-
-
-minishell$ VAR=HOLA echo $VAR double free

@@ -12,10 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* is_n: Hace la comprobacion de si tiene argumento n en cualquiera
-	* de sus variantes -nnnnn -n etc
-*/
 int	is_n(char *av)
 {
 	int	i;
@@ -33,11 +29,6 @@ int	is_n(char *av)
 	return (0);
 }
 
-/*
-	*echo_write: escribe 'len' bytes en stdout. En error, imprime el prefijo
-	*"minishell: " en stderr y retorna 1. No hace perror (se reserva para "\n").
-	*Retorno: 0 en éxito; 1 en error de write(2).
-*/
 static int	echo_write(const char *s, size_t len)
 {
 	if (write(1, s, len) < 0)
@@ -48,12 +39,6 @@ static int	echo_write(const char *s, size_t len)
 	return (0);
 }
 
-/*
-	*echo_newline: escribe un salto de línea en stdout. En error, imprime
-	*"minishell: " y luego perror("write") para
-	* replicar el comportamiento original.
-	*Retorno: 0 en éxito; 1 en error de write(2).
-*/
 static int	echo_newline(void)
 {
 	if (write(1, "\n", 1) < 0)
@@ -65,11 +50,6 @@ static int	echo_newline(void)
 	return (0);
 }
 
-/*
-	*consume_n_flags: avanza 'i' mientras existan
-	* flags -n válidos y marca n_flag.
-	*Retorno: (por referencia) i y n_flag actualizados.
-*/
 static void	consume_n_flags(t_cmd *cmd, int *i, int *n_flag)
 {
 	*n_flag = 0;
@@ -80,14 +60,6 @@ static void	consume_n_flags(t_cmd *cmd, int *i, int *n_flag)
 	}
 }
 
-/*
-	*ft_echo: implementa el built-in echo con soporte para múltiples -n.
-	*Semántica: imprime los argumentos separados por un espacio; si no hay -n,
-	*termina con '\n'. Replica exactamente el manejo de errores de write(2):
-	*para argumentos/espacios sólo imprime
-	* "minishell: "; para '\n' además hace perror.
-	*Retorno: 0 en éxito; 1 en error.
-*/
 int	ft_echo(t_cmd *cmd)
 {
 	int	i;

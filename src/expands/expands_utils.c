@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*is_valid_dollar_start: comprueba si el carácter que sigue a '$' puede
-	*iniciar una variable: '?', '_' o letra.
-	*Retorno: 1 si es válido; 0 en caso contrario.
-*/
 int	is_valid_dollar_start(unsigned char c)
 {
 	if (c == '?' || c == '_')
@@ -26,11 +21,6 @@ int	is_valid_dollar_start(unsigned char c)
 	return (0);
 }
 
-/*
-	*toggle_squote: conmuta el estado de comilla simple si c=='\'' y no hay
-	*comillas dobles activas.
-	*Retorno: 1 si conmutó; 0 en caso contrario.
-*/
 int	toggle_squote(char c, int *sq, int dq)
 {
 	if (c == '\'' && !dq)
@@ -41,11 +31,6 @@ int	toggle_squote(char c, int *sq, int dq)
 	return (0);
 }
 
-/*
-	*toggle_dquote: conmuta el estado de comilla doble si c=='"' y no hay
-	*comillas simples activas.
-	*Retorno: 1 si conmutó; 0 en caso contrario.
-*/
 int	toggle_dquote(char c, int *dq, int sq)
 {
 	if (c == '"' && !sq)
@@ -56,11 +41,6 @@ int	toggle_dquote(char c, int *dq, int sq)
 	return (0);
 }
 
-/*
-	*find_unquoted_dollar: devuelve un puntero al primer '$' no protegido por
-	*comillas simples (las dobles no bloquean). Solo acepta '$' si el siguiente
-	*carácter puede iniciar una variable (?, '_' o letra).
-*/
 char	*find_unquoted_dollar(const char *s)
 {
 	int	i;
@@ -85,11 +65,6 @@ char	*find_unquoted_dollar(const char *s)
 	return (NULL);
 }
 
-/*
-	* expand: busca la variable(auqnue en el prototipo ponga command)
-	* en el entorno especificado
-	* una vez la encuentra devuelve todo lo que venga despues del equal
-*/
 char	*expand(char *command, char **env)
 {
 	int		i;

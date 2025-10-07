@@ -12,10 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*all_vars: comprueba que todos los argumentos del comando
-	* sean declaraciones validas de variables.
-*/
 int	all_vars(char **av)
 {
 	int	i;
@@ -32,11 +28,6 @@ int	all_vars(char **av)
 	return (1);
 }
 
-/*
-	*handle_all_vars: como todos los elementos son validos, actualiza la
-	* lista de variables del entorno de la minishell.
-	* despues borra el comando entero, puesto que no es ejecutable.
-*/
 void	handle_all_vars(t_cmd *cmd, t_mini *shell)
 {
 	int	i;
@@ -50,11 +41,6 @@ void	handle_all_vars(t_cmd *cmd, t_mini *shell)
 	remove_command(cmd);
 }
 
-/*
-	*handle_partial_vars: repasa todos los argumentos en busca de una
-	*asignacion si la encuentra y es valida, la guarda en la
-	*lista de variables del comando, y borra el argumento del comando
-*/
 void	handle_partial_vars(t_cmd *cmd)
 {
 	while (cmd->av && cmd->av[0]
@@ -66,13 +52,6 @@ void	handle_partial_vars(t_cmd *cmd)
 	}
 }
 
-/*
-	*vars: recorre la lista de todos los comandos realizada por el parser
-	* se encarga de comprobar si, todo el comando son
-	* declaraciones de variables validas o si solo algun
-	* argumento de los comandos
-	* lo son, segun una cosa u otra, actua.
-*/
 t_cmd	*vars(t_cmd *cmds, t_mini *shell)
 {
 	t_cmd	*head;

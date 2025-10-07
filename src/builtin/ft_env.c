@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* equal: comprueba si existe el caracter =
-*/
 int	equal(char *str, char c)
 {
 	while (*str)
@@ -26,10 +23,6 @@ int	equal(char *str, char c)
 	return (0);
 }
 
-/*
-	* ft_env: comprueba el numero de argumentos
-	* imprime el entirno de las variables
-*/
 int	ft_env(t_cmd *cmd, char **env)
 {
 	int	status;

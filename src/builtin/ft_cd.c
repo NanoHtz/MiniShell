@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*cd_change_dir: guarda el cwd actual en *old, cambia a 'target' y guarda
-	*el nuevo cwd en *now. En fallo imprime perror("cd") y limpia *old.
-	*Retorno: 0 en éxito; 1 en error.
-*/
 int	cd_change_dir(const char *target, char **old, char **now)
 {
 	*old = getcwd(NULL, 0);
@@ -38,12 +33,6 @@ int	cd_change_dir(const char *target, char **old, char **now)
 	return (0);
 }
 
-/*
-	*cd_getenv_required: obtiene una variable de entorno duplicada.
-	*Si no existe, imprime el mensaje de error indicado y retorna 1.
-	*Retorno: 0 en éxito; 1 si la variable no está definida o falla la reserva.
-
-*/
 int	env_normi(t_mini *shell, const char *name, const char *errmsg, char **out)
 {
 	*out = ms_getenv_dup(shell, name);
@@ -55,14 +44,6 @@ int	env_normi(t_mini *shell, const char *name, const char *errmsg, char **out)
 	return (0);
 }
 
-/*
-	*cd_get_target: determina el directorio objetivo para 'cd'.
-	*Casos:
-	*  - Sin argumento → $HOME (error si no está).
-	*  - "-" → $OLDPWD y marcar print_new=1 (error si no está).
-	*  - Otro → duplicar literal.
-	*Retorno: 0 en éxito; 1 en error.
-*/
 int	cd_get_target(t_cmd *cmd, t_mini *shell, char **out, int *print_new)
 {
 	*print_new = 0;
@@ -82,16 +63,6 @@ int	cd_get_target(t_cmd *cmd, t_mini *shell, char **out, int *print_new)
 	return (0);
 }
 
-/*
-	*ft_cd: implementa el builtin 'cd' con actualización de PWD/OLDPWD.
-	*Flujo:
-	* 1) Valida nº de argumentos.
-	* 2) Obtiene el destino (HOME/OLDPWD/literal)
-	* y si debe imprimirse el nuevo cwd.
-	* 3) Cambia de directorio y obtiene cwd previo/actual.
-	* 4) Actualiza OLDPWD y PWD; si procede, imprime el nuevo cwd.
-	*Retorno: 0 en éxito; 1 en error.
-*/
 int	ft_cd(t_cmd *cmd, t_mini *shell)
 {
 	char	*target;

@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*is_builtin: Hace la comprobacion de si el builtin esta en el comando.
-*/
 int	is_builtin(char *cmd)
 {
 	if (!cmd)
@@ -36,10 +33,6 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-/*
-	* Primero hace una comprobacion de si el argumento del comando es un builtin
-	* en caso de que lo sea, ejecuta el builtin
-*/
 int	exec_builtin(t_cmd *cmd, t_mini *shell)
 {
 	if (!cmd || !cmd->av || !cmd->av[0])
@@ -64,9 +57,6 @@ int	exec_builtin(t_cmd *cmd, t_mini *shell)
 	return (127);
 }
 
-/*
-	! Muy posiblemente esta funcion ya no es necesaria.
-*/
 void	builtin(t_cmd *cmds, t_mini *shell)
 {
 	t_cmd	*cmd;

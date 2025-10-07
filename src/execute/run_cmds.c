@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* count_commands: Cuenta el total de comandos.
-*/
 int	count_commands(t_cmd *cmds)
 {
 	int	count;
@@ -28,17 +25,6 @@ int	count_commands(t_cmd *cmds)
 	return (count);
 }
 
-/*
-	* run_cmds: Cogemos el path del comando, la hemos extraido del loop
-	* para ahorrar lineas de codigo.
-	* contamos comandos que nos ayudara a la hora de manejar pipes.
-	* cogemos el path para cada comando.
-	* ejecutamos los comandos.
-	todo -> Se ha añadido la comprobacion del builtin
-	todo -> asi aseguramos que si es una se ejecute directamente
-	todo -> El path solo se obtenia si habia un unico comando.
-	todo -> Este cambio añadiendo el builtin ya ha conseguido ejecutarlos bien
-*/
 static void	set_commands_path(t_cmd *cmds, char **env)
 {
 	t_cmd	*cur;

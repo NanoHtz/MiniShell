@@ -12,10 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*Duplica el entorno envp.
-	contamos las variables de env, reservamos y vamos duplicando.
-*/
 char	**copy_env(char **envp)
 {
 	int		count;

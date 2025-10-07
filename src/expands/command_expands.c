@@ -12,13 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* get_env_value: Se hace por jerarquias
-	* ha de buscar desde el ambito mas local al mas global.
-	* entorno del comando, de la minishell y de bash
-	* el primero que encuentre en ese orden lo devuelve.
-	* por si se llaman igual en distintos ambitos.
-*/
 char	*get_env_value(char *key, char **cmd_env, char **own_env, char **envp)
 {
 	char	*val;
@@ -37,11 +30,6 @@ char	*get_env_value(char *key, char **cmd_env, char **own_env, char **envp)
 	return (ft_strdup(""));
 }
 
-/*
-	*handle_qmark: gestiona la expansión especial "$?".
-	*Acción: convierte last_status a cadena y fija *var_len=2.
-	*Retorno: cadena asignada con el valor; NULL en error.
-*/
 char	*handle_qmark(t_mini *shell, int *var_len)
 {
 	char	*value;
@@ -53,12 +41,6 @@ char	*handle_qmark(t_mini *shell, int *var_len)
 	return (value);
 }
 
-/*
-	*extract_named_var: extrae y busca el valor de una variable con nombre.
-	*Entrada: 'var' apunta al '$', 'j' es la longitud total consumida.
-	*Acción: toma el nombre, busca en entornos y fija *var_len=j.
-	*Retorno: valor asignado (o NULL si no existe o hay error de memoria).
-*/
 char	*extract_named_var(const char *var, int j,
 				t_mini *shell, int *var_len)
 {
@@ -74,11 +56,6 @@ char	*extract_named_var(const char *var, int j,
 	return (value);
 }
 
-/*
-	*scan_var_name: dada una cadena que empieza en '$', devuelve la longitud
-	*total consumida por el identificador de variable (incluye el '$' inicial).
-	*Formato admitido del nombre: [A-Za-z0-9_]* tras el primer carácter.
-*/
 int	scan_var_name(const char *var)
 {
 	int	j;
@@ -89,15 +66,6 @@ int	scan_var_name(const char *var)
 	return (j);
 }
 
-/*
-	*extract_var: obtiene el valor expandido desde el
-	* primer '$' no entrecomillado.
-	*Casos:
-	*  - "$?" → handle_qmark().
-	*  - "$NAME" con nombre válido → extract_named_var().
-	*  - En otro caso → NULL (no hay expansión).
-	*Nota: *var_len se fija con los caracteres consumidos (incluye '$').
-*/
 char	*extract_var(char *str, char **cmd_env, t_mini *shell, int *var_len)
 {
 	char	*var;

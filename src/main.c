@@ -31,15 +31,6 @@ void	loop_aux(char *line, t_lexer *lxr, t_mini *shell)
 	free_loop(lxr, cmds, line);
 }
 
-//*!	-> Aún no se han comparado los errores con los errores esperados.
-//*!	-> Readline da leaks de memoria que no es necesario corregir.
-/*
-	*init_mini: inicializa los campos necesarios para la mini.
-	*En el futuro podemos ir expandiendola.
-	*Se incluye por ejemplo la inicializacion del historial. Using_history es
-	*de la biblioteca permitida de readline, inicializa la estructura de datos
-	*necesaria para almacenar el historial.
-*/
 t_lexer	*init_mini(void)
 {
 	t_lexer	*lxr;
@@ -55,20 +46,6 @@ t_lexer	*init_mini(void)
 	return (lxr);
 }
 
-/*
-	*loop: genera el bucle donde introduciremos los prompts.
-	*readline:Muestra el prompt especificado.
-	*Nos permite usar comandos basicos de historial.
-	*Por ejemplo usar el comando anterior con la flecha hacia arriba.
-	*Reserva memoria con malloc, debemos liberarla mas adelante.
-	*add_history: añade a la lista de historial la linea introducida.
-	*Se llama a lexer, expand y parser, a la creacion de variables
-	*a la expansion de comandos
-	! se debe añadir la variable $?.
-	*Se pueden llamar a mas funciones en el futuro.
-	*Se liberan algunos elementos.
-	builtin(cmds, shell); -> poner esto si existe algun error.
-*/
 void	loop(t_lexer *lxr, t_mini *shell)
 {
 	char	*line;
@@ -96,11 +73,6 @@ void	loop(t_lexer *lxr, t_mini *shell)
 	}
 }
 
-/*
-	*clear_history, limpia el historial, para evitar leaks.
-	*limpieza general antes de terminar.
-	! Habrá que añadir limpiezas de own_env y comand_env
-*/
 void	clear_mini(t_lexer *lxr, t_mini *shell)
 {
 	rl_clear_history();
@@ -108,12 +80,6 @@ void	clear_mini(t_lexer *lxr, t_mini *shell)
 	free(lxr);
 }
 
-/*
-	*main, cuya estructura básica sera:
-	-inicializacion
-	-mini
-	-limpieza
-*/
 int	main(int ac, char **av, char **envp)
 {
 	t_lexer	*lxr;

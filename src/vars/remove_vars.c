@@ -12,15 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*remove_vars_from_av: elimina las variables de los comandos, en esta
-	* parte, un comando tendra asignacion y comando
-	* la asignacion no es ejecutable, asique primero ha de ser
-	* eliminada, para dejarlo limpio ante la ejecucion.
-	* cuenta las asignaciones para reservar memoria
-	* despues copia lo av que no son asignaciones en un nuevo comando
-	* y libera el anterior
-*/
 void	remove_vars_from_av(t_cmd *cmd)
 {
 	char	**new_av;
@@ -49,13 +40,6 @@ void	remove_vars_from_av(t_cmd *cmd)
 	cmd->ac = j;
 }
 
-/*
-	*remove_command: borra todos los elementos del comando
-	* libera sus av
-	* pone en 0 ac
-	* y libera su entorno
-	* todo en caso de que tenga
-*/
 void	remove_command(t_cmd *cmd)
 {
 	if (!cmd)
@@ -73,9 +57,6 @@ void	remove_command(t_cmd *cmd)
 	cmd->ac = 0;
 }
 
-/*
-	* remove_node: Elimina el nodo del comando ya liberado
-*/
 void	remove_node(t_cmd **head, t_cmd *target)
 {
 	t_cmd	*curr;

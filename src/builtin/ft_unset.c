@@ -12,9 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	* validate: valida los argumentos
-*/
 int	validate(char *av)
 {
 	int	i;
@@ -33,9 +30,6 @@ int	validate(char *av)
 	return (1);
 }
 
-/*
-	* remove_var: libera variables
-*/
 static int	env_key_match(char *entry, char *key)
 {
 	int	klen;
@@ -71,10 +65,6 @@ void	remove_var(char *key, char **env)
 	}
 }
 
-/*
-	* ft_unset: comprueba si los argyumentos estan validados
-	* si lo estan, los borra
-*/
 int	ft_unset(t_cmd *cmd, char **env)
 {
 	int	i;

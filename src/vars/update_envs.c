@@ -12,12 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*update_env: actualiza el entorno de la minishell
-	* guarda el nombre de la asignacion y la busca, por si ya esta
-	* en caso de que este, reemplaza la entrada dentro del entorno
-	*en caso de que no, añade la entrada en el entorno.
-*/
 void	update_env(char ***own_env, const char *assign)
 {
 	char	*key;
@@ -36,12 +30,6 @@ void	update_env(char ***own_env, const char *assign)
 	free(key);
 }
 
-/*
-	*set_cmd_env: guarda las asignaciones del entorno del comando.
-	* cuenta cuantas asignaciones debera hacer
-	* reserva memoria para las asignaciones
-	* guarda las asignaciones en un nuevo entorno del comando
-*/
 void	set_cmd_env(t_cmd *cmd)
 {
 	int	i;

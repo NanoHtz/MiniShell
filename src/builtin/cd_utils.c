@@ -26,14 +26,6 @@ char	*ms_getenv_dup(t_mini *shell, const char *key)
 	return (ft_strdup(eq + 1));
 }
 
-/*
-	*ms_setenv: inserta o actualiza una entrada "key=value" en el entorno.
-	*Flujo:
-	* 1) Construye el prefijo "key=" en 'tmp'.
-	* 2) Determina el valor a usar: si 'val' es NULL, usa la cadena vacía.
-	* 3) Concatena para formar 'kv' = "key=" + valor.
-	* 4) Busca la clave en el entorno: si existe, la reemplaza; si no, la añade.
-*/
 void	ms_setenv(t_mini *shell, const char *key, const char *val)
 {
 	char		*kv;

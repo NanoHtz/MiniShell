@@ -12,11 +12,6 @@
 
 #include "../../Inc/minishell.h"
 
-/*
-	*export_escaped_len: calcula la longitud necesaria para almacenar 'val'
-	*escapando comillas dobles (") y barras invertidas (\) con un '\' extra.
-	*Retorno: longitud total (sin contar el terminador nulo).
-*/
 static int	export_escaped_len(const char *val)
 {
 	int	i;
@@ -34,10 +29,6 @@ static int	export_escaped_len(const char *val)
 	return (len);
 }
 
-/*
-	*export_fill_escaped: copia 'val' a 'out' escapando " y \ con una barra
-	*invertida adicional. Escribe el terminador nulo al final.
-*/
 static void	export_fill_escaped(const char *val, char *out)
 {
 	int	i;
@@ -54,12 +45,6 @@ static void	export_fill_escaped(const char *val, char *out)
 	out[k] = '\0';
 }
 
-/*
-	*escape_export_value: devuelve una copia de 'val' con " y \ escapados.
-	*Casos:
-	*  - val == NULL → devuelve una copia de "".
-	*Memoria: el llamador debe liberar la cadena resultante.
-*/
 static char	*escape_export_value(const char *val)
 {
 	char	*out;

@@ -87,10 +87,12 @@ static int	parse_ll_with_overflow(const char *s, long long *out)
 int	ft_exit(t_cmd *cmd, t_mini *shell)
 {
 	long long	ll;
-	int			code;
 
 	if (cmd->ac == 1)
+	{
+		write(1, "exit\n", 5);
 		exit(shell->last_status);
+	}
 	if (!parse_ll_with_overflow(cmd->av[1], &ll))
 	{
 		ft_putstr_fd("exit: ", 2);
@@ -98,11 +100,15 @@ int	ft_exit(t_cmd *cmd, t_mini *shell)
 		ft_putendl_fd(": numeric argument required", 2);
 		exit(2);
 	}
+	if (cmd->ac == 2)
+	{
+		write(1, "exit\n", 5);
+		exit(ft_atoi(cmd->av[1]));
+	}
 	if (cmd->ac > 2)
 	{
 		ft_putendl_fd("exit: too many arguments", 2);
 		return (1);
 	}
-	code = (int)(unsigned char)ll;
-	exit(code);
+	exit((int)(unsigned char)ll);
 }

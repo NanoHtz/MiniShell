@@ -35,9 +35,8 @@ int	handle_word(t_list **node, t_cmd **cur, t_mini *shell)
 	}
 	if (skip_unquoted(acc, had_quote, node, last))
 		return (1);
-	if (add_arg(*cur, acc) == 1)
-		return (free(acc), -1);
-	free(acc);
+	if (add_arg_and_free(*cur, acc) < 0)
+		return (-1);
 	*node = last->next;
 	return (1);
 }
