@@ -69,15 +69,17 @@ Gracias a mi compañero de MiniShell @pabferna (https://github.com/pabferna).
 <br><br>
 
 <b>🧾 Lexer & Parser</b><br>
-• Se separa en <b>tokens</b> con una enum (palabras, <code>|</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code>).<br>
-• <b>Comillas</b>: <code>' '</code> desactiva toda expansión; <code>" "</code> mantiene expansión de <code>$VAR</code> y respeta espacios internos.<br>
+• Se separa en <b>tokens</b> con una estructura enum (palabras, <code>|</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code>).<br>
+• <b>Comillas</b>: <code>' '</code> desactiva toda expansión; <code>" "</code> mantiene expansión de <code>$VAR</code> y respeta espacios internos, ademas se gestionan las comillas anidadas como "'$USER'".<br>
 • Se construye una estructura por <b>comando</b> con su argv, redirecciones y, si procede, conexiones de <b>pipe</b>.
 <br><br>
 
 <b>💲 Expansión</b><br>
+Permite la declaracion de variables guardadas en diferentes estructuras de strings, para los distintos entornos, bash, minishell y para cada comando se genera una lista de variables visibles,
+además se realiza una jerarquia, se busca las variables a expandir justo en el orden inverso.
 • <code>$VAR</code> y <code>$?</code> (último status).<br>
 • Sin expansión entre <code>' '</code>; con expansión entre <code>" "</code>.<br>
-• Expansión antes de ejecutar y antes de abrir redirecciones (con reglas especiales en heredoc).
+• Expansión antes de ejecutar y antes de abrir redirecciones (con reglas especiales de expansion para el heredoc).
 <br><br>
 
 <b>🔁 Pipes y redirecciones</b><br>
@@ -108,12 +110,6 @@ Gracias a mi compañero de MiniShell @pabferna (https://github.com/pabferna).
 • Señal SIGINT en un proceso → <b>130</b>; SIGQUIT → <b>131</b>.<br>
 • Error de <b>sintaxis</b> (p.ej., <code>|</code> inesperado) → <b>258</b>.<br>
 • <code>exit</code> usa su argumento numérico (módulo 256) o el último status.
-<br><br>
-
-<b>🧊 Casos borde</b><br>
-• Múltiples espacios/quotes anidadas: el parser debe conservar el contenido exacto tras expansión.<br>
-• Redirecciones encadenadas y pipes largos: cerrar todos los FDs no usados.<br>
-• Heredoc + señales: cancelar limpio FDs temporales.
 <br><br>
 
 </details>
