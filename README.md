@@ -13,6 +13,10 @@
   <img src="https://raw.githubusercontent.com/NanoHtz/Assets/main/100.png" alt="mini nota" height="120">
 </p>
 
+<br>
+Gracias a [Pabferna](https://github.com/pabferna) por la revisión de código.
+<br>
+
 ## Índice
 - [Resumen](#resumen)
 - [¿Para qué?](#para-que)
