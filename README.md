@@ -14,7 +14,9 @@
 </p>
 
 <br>
+<p align="center">
 Gracias a mi compañero de MiniShell @pabferna (https://github.com/pabferna).
+</p>
 <br>
 
 ## Índice
